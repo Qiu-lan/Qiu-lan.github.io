@@ -50,7 +50,7 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -397,7 +397,8 @@
                 <h1 id="php伪协议"><a href="#php伪协议" class="headerlink" title="php伪协议"></a>php伪协议</h1><h2 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h2><p>产生原因是在通过 PHP 的函数引入文件时，为了灵活包含文件会将被包含文件设置为变量，通过动态变量来引入需要包含的文件。此时用户可以对变量的值可控，而服务器端未对变量值进行合理地校验或者校验<strong>被绕过</strong>，就会导致文件包含漏洞。</p>
 <h2 id="包含漏洞分类"><a href="#包含漏洞分类" class="headerlink" title="包含漏洞分类"></a>包含漏洞分类</h2><h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><p>当包含的文件在服务器本地时，就形成了本地文件包含。文件包含可以包含任意文件，被包含的文件可以不是 PHP 代码，可以是文本或图片等。只要文件被包含就会被服务器脚本语言执行，如果包含的文件内容<strong>不符合</strong> php 语法，会直接将文件内容输出。</p>
 <h3 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h3><p>当包含的文件在远程服务器上时，就形成了远程文件包含。所包含远程服务器的文件后缀<strong>不能</strong>与目标服务器语言相同，远程文件包含需要在 php.ini 中设置：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Copy <span class="attr">Highlighter-hljsallow_url_include</span> = <span class="literal">on</span>（是否允许 include/require 远程文件）</span><br><span class="line"><span class="attr">allow_url_fopen</span> = <span class="literal">on</span>（是否允许打开远程文件）</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight ini">Copy <span class="attr">Highlighter-hljsallow_url_include</span> = <span class="literal"><code class="language-highlight ini">Copy <span class="attr">Highlighter-hljsallow_url_include</span> = <span class="literal">on</span>（是否允许 include/require 远程文件）
+<span class="attr">allow_url_fopen</span> = <span class="literal">on</span>（是否允许打开远程文件）</code></pre>
 
 <h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><h2 id="PHP-伪协议"><a href="#PHP-伪协议" class="headerlink" title="PHP 伪协议"></a>PHP 伪协议</h2><p><strong>PHP 伪协议</strong>是 PHP 支持的协议与封装协议，几个 PHP 支持的伪协议如下。</p>
 <table>
@@ -428,11 +429,11 @@
 <td>压缩流</td>
 </tr>
 </tbody></table>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=php://filter/read=convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight bash"><code class="language-highlight bash">?file=php://filter/read=convert.base64-encode/resource=index.php</code></pre>
 
 <p>稍微解释下这个做法，<strong>php:&#x2F;&#x2F;filter&#x2F;</strong> 是一种访问本地文件的协议，&#x2F;read&#x3D;convert.base64-encode&#x2F; 表示读取的方式是 base64 编码后，convert.base64-encode是一种过滤器，resource&#x3D;index.php 表示目标文件为index.php。问什么要进行 base64 编码呢？如果不进行 base64 编码传入，index.php 就会直接执行，我们就看不到文件中的内容了。<br>php 协议还常用 <strong>php:&#x2F;&#x2F;input</strong>，这可以访问请求的原始数据的只读流，可以读取 POST 请求的参数。</p>
 <h2 id="data-伪协议"><a href="#data-伪协议" class="headerlink" title="data 伪协议"></a>data 伪协议</h2><p>php 5.2.0 起，数据流封装器开始有效，主要用于数据流的读取，如果传入的数据是PHP代码就会执行代码。使用方法为:</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Copy Highlighter-hljsdata://text/plain;base64,<span class="built_in">xxxx</span>(base64编码后的数据)</span><br></pre></td></tr></table></figure>
+<pre class=" language-highlight scss">Copy Highlighter-hljsdata://text/plain;base64,<span class="built_in"><code class="language-highlight scss">Copy Highlighter-hljsdata://text/plain;base64,<span class="built_in">xxxx</span>(base64编码后的数据)</code></pre>
                 
             </div>
             <hr/>
