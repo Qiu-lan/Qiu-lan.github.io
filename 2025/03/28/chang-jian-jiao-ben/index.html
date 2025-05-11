@@ -767,7 +767,27 @@ decrypted_bytes = <span class="built_in">bytes</span>([c ^ k <span class="keywor
 <span class="comment"># 打印解密后的字符串（这行代码其实和上面的print是重复的，但保留以展示意图）</span>
 <span class="comment"># print(decrypted_bytes.decode(errors="ignore"))</span></code></pre>
 
+<h4 id="12-日志中提取十六进制"><a href="#12-日志中提取十六进制" class="headerlink" title="12.日志中提取十六进制"></a>12.日志中提取十六进制</h4><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">import re
 
+   # 读取数据
+with open(&#x27;2.txt&#x27;,&#x27;r&#x27;) as file:
+      lines = file.readlines()
+
+output_str = &#x27;&#x27;#存储最终字符串
+
+# 遍历数据
+for i in range(1, len(lines)):
+      current_line = lines[i]
+      previous_line = lines[i-1]
+
+      #过滤数据
+      if re.search(r&#x27;from_user\)="2B&#x27;,current_line):
+      # 使用正则表达式提取内容
+         match = re.search(r&#x27;from_user\)="(.*)"&#x27;, previous_line)
+         if match:
+             output_str += match.group(1) + &#x27; &#x27;
+# 输出结果
+print(output_str)</code></pre>
 
 
 
