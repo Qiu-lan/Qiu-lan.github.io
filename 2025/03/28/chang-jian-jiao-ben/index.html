@@ -837,6 +837,67 @@ if __name__ == &#x27;__main__&#x27;:
         cols=10
     )</code></pre>
 
+<h4 id="14-CRC32"><a href="#14-CRC32" class="headerlink" title="14.CRC32"></a>14.CRC32</h4><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">import zipfile
+import binascii
+import string
+
+def FileRead(zipname):
+    try:
+        f = open(zipname)         #打开⽬标⽂件
+        f.close()
+    except FileNotFoundError:
+        print("未找到同⽬录下的压缩包⽂件" + zipname) #如果未找到⽂件，输出错误
+        return                         #退出线程，进⾏详细报错
+    except PermissionError:
+        print("⽆法读取⽬标压缩包（⽆权限访问）")       #如果发现目标文件无权限，输出错误
+        return                                 #退出线程，进行详细报错
+
+def FourByte(zipname):
+    zip_url = "./" + zipname
+    file_zip = zipfile.ZipFile(zip_url)  #⽤zipfile读取指定的压缩包⽂件
+    name_list = file_zip.namelist()  #使⽤⼀个列表，获取并存储压缩包内所有的⽂件名
+    crc_list = []
+    crc32_list = []
+    print(&#x27;+--------------遍历指定压缩包的CRC值 - ---------------+&#x27;)
+    for name in name_list:
+        name_message = file_zip.getinfo(name)
+        crc_list.append(name_message.CRC)
+        crc32_list.append(hex(name_message.CRC))
+        print(&#x27;[OK] &#123;0&#125;: &#123;1&#125;&#x27;.format(name, hex(name_message.CRC)))
+    print(&#x27;+------------对输出的CRC值进⾏碰撞 - ----------------+&#x27;)
+    comment = &#x27;&#x27;
+    chars = string.printable
+    for crc_value in crc_list:
+        for char1 in chars:
+            for char2 in chars:
+                for char3 in chars:
+                    for char4 in chars:
+                        res_char = char1 + char2 + char3 + char4  #获取任意4Byte字符
+                        thicken_crc = binascii.crc32(res_char.encode())  #获取任意4Byte字符串的CRC32值
+                        calc_crc = thicken_crc & 0xffffffff  #将任意4Byte字符串的CRC32值与0xffffffff进⾏与运算
+                        if calc_crc == crc_value:  #匹配两个CRC32值
+                           print(&#x27;[Success] &#123;&#125;:&#123;&#125;&#x27;.format(hex(crc_value),res_char))
+                           comment += res_char
+    print(&#x27;+-----------------CRC碰撞结束！！！-----------------+&#x27;)
+    crc32_list = str(crc32_list)
+    crc32_list = crc32_list.replace(&#x27;\&#x27;&#x27;, &#x27;&#x27;)
+    print("读取成功，导出CRC列表为：" + crc32_list)                     #导出CRC列表
+    if comment:
+         print(&#x27;CRC碰撞成功，结果为: &#123;&#125;&#x27;.format(comment))                  #输出CRC碰撞结果
+    else:
+         print(&#x27;CRC碰撞没有结果，请检查压缩包内⽂件是否为4Byte！！！&#x27;)
+
+if __name__ == &#x27;__main__&#x27;:
+
+    zipname = str(input("请输⼊压缩包名字：\n4Byte >> > "))
+    try:
+        if zipname:
+           FileRead(zipname)
+           FourByte(zipname)
+    except BaseException as e:
+        err = str(e)
+        print(&#x27;脚本详细报错：&#x27; + err)</code></pre>
+
 
 
 
