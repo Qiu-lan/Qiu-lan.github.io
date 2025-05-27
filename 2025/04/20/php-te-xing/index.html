@@ -414,8 +414,10 @@
 
 &#x27;123&#x27; === 123 // false</code></pre>
 
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215823672.png" alt="image-20250414215823672"></p>
-<p><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250414215903794.png" alt="image-20250414215903794"></p>
+
+
+<p><img src="image-20250414215823672.png" alt="image-20250414215823672"></p>
+<p><img src="image-20250414215903794.png" alt="image-20250414215903794"></p>
 <h2 id="intval"><a href="#intval" class="headerlink" title="intval()"></a>intval()</h2><p>基于获取变量的整数值函数的绕过</p>
 <pre class=" language-highlight plaintext"><code class="language-highlight plaintext">intval(mixed $value, int $base = 10): int
 # eg:
@@ -520,7 +522,7 @@ print(res.headers)</code></pre>
 <p><strong>代码使用了 <code>if(!strpos($str, 0))</code> 对八进制进行过滤, 可以在字符串开头加空格绕过</strong></p>
 <p><strong>strpos() 遇到数组返回 null</strong></p>
 <p><strong>strrpos() stripos() strripos() 同理</strong></p>
-<p><strong><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415204317350.png" alt="image-20250415204317350"></strong></p>
+<p><strong><img src="image-20250415204317350.png" alt="image-20250415204317350"></strong></p>
 <h2 id="is-numeric"><a href="#is-numeric" class="headerlink" title="is_numeric()"></a><strong>is_numeric()</strong></h2><p><strong>数字或数字字符串检查函数</strong></p>
 <p><strong>特性：</strong></p>
 <ul>
@@ -537,7 +539,7 @@ is_numeric("\t36"); // true
 is_numeric("36\n"); // false
 is_numeric("36\t"); // false</code></pre>
 
-<p><strong><img src="/./php%E7%89%B9%E6%80%A7.assets/image-20250415210640094.png" alt="image-20250415210640094"></strong></p>
+<p><strong><img src="image-20250415210640094.png" alt="image-20250415210640094"></strong></p>
 <h2 id="in-array"><a href="#in-array" class="headerlink" title="in_array()"></a><strong>in_array()</strong></h2><p><strong>is_array() 可以「检测」变量是不是「数组」类型。</strong></p>
 <p><strong>由于 PHP 自动 &#x2F; 强制 类型转换的特性，会将待搜索的值的类型自动转换为数组中的值的类型。</strong></p>
 <pre class=" language-highlight plaintext"><code class="language-highlight plaintext">var_dump(in_array(&#x27;1abc&#x27;, [1,2,3,4,5])); // true

