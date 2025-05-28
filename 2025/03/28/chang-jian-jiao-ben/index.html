@@ -502,7 +502,7 @@ output = <span class="string">""</span>
     <span class="keyword">else</span>:
         output += <span class="string">&#x27;[unknown]&#x27;</span>
 
-<span class="built_in">print</span> <span class="string">&#x27;output :\n&#x27;</span> + output</code></pre>
+<span class="built_in">print</span>(<span class="string">&#x27;output :\n&#x27;</span> + output)</code></pre>
 
 <p>keyboard2.py</p>
 <pre class=" language-highlight python"><code class="language-highlight python">normalKeys = &#123;
@@ -884,9 +884,18 @@ if __name__ == &#x27;__main__&#x27;:
         err = str(e)
         print(&#x27;脚本详细报错：&#x27; + err)</code></pre>
 
-
-
-
+<p>15.云影密码</p>
+<pre class=" language-highlight plaintext"><code class="language-highlight plaintext">a="884080810882108108821042084010421"   #输入
+s=a.split(&#x27;0&#x27;)
+print(s)
+l=[]
+for i in s:
+    sum=0
+    for j in i:
+        sum+=eval(j)
+    l.append(chr(sum+64))
+print(&#x27;&#x27;.join(l))
+</code></pre>
 
 
 
